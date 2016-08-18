@@ -10,6 +10,13 @@ namespace Exostasis.Equations
     {
         public int _constant { get; private set; }
         public int _exponent { get; private set; }
-        public string variable { get; private set; }
+        public string _variable { get; private set; }
+
+        public Term (int constant)
+        {
+            _constant = constant;
+            _exponent = 1;
+            _variable = null;
+        }
     }
 }
