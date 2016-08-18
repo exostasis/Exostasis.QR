@@ -1,4 +1,0 @@
-C:\Users\exo\Source\Repos\QRCode\Equations\Exostasis.Equations\bin\Exostasis.Equations.dll
-C:\Users\exo\Source\Repos\QRCode\Equations\Exostasis.Equations\bin\Exostasis.Equations.pdb
-C:\Users\exo\Source\Repos\QRCode\Equations\Exostasis.Equations\obj\Debug\Exostasis.Equations.dll
-C:\Users\exo\Source\Repos\QRCode\Equations\Exostasis.Equations\obj\Debug\Exostasis.Equations.pdb
