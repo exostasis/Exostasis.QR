@@ -1,5 +1,13 @@
 ﻿################################################################################
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
-
-/Equations/Exostasis.Equations/
+/Equations/Exostasis.Equations/obj/Debug
+/QR/Exostasis.QR.Encoder/obj/Debug
+/QR/Exostasis.QR.Generator/obj/Debug
+/QR/Exostasis.QR.Gui/obj/Debug
+/QR/Exostasis.QR.Gui/bin
+/Equations/Exostasis.Equations/bin
+/QR/Exostasis.QR.Encoder/bin
+/QR/Exostasis.QR.Generator/bin
+/QR/Exostasis.QR.Terminal/bin
+/QR/Exostasis.QR.Terminal/obj/Debug
