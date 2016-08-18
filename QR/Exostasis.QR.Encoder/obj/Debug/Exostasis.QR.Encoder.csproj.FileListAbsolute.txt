@@ -1,0 +1,4 @@
+C:\Users\exo\Source\Repos\QRCode\QR\Exostasis.QR.Encoder\bin\QREncoder.dll
+C:\Users\exo\Source\Repos\QRCode\QR\Exostasis.QR.Encoder\bin\QREncoder.pdb
+C:\Users\exo\Source\Repos\QRCode\QR\Exostasis.QR.Encoder\obj\Debug\QREncoder.dll
+C:\Users\exo\Source\Repos\QRCode\QR\Exostasis.QR.Encoder\obj\Debug\QREncoder.pdb

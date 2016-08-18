@@ -1,0 +1,7 @@
+C:\Users\exo\Source\Repos\QRCode\QR\Exostasis.QR.Generator\bin\Exostasis.QR.Generator.dll
+C:\Users\exo\Source\Repos\QRCode\QR\Exostasis.QR.Generator\bin\Exostasis.QR.Generator.pdb
+C:\Users\exo\Source\Repos\QRCode\QR\Exostasis.QR.Generator\bin\QREncoder.dll
+C:\Users\exo\Source\Repos\QRCode\QR\Exostasis.QR.Generator\bin\QREncoder.pdb
+C:\Users\exo\Source\Repos\QRCode\QR\Exostasis.QR.Generator\obj\Debug\Exostasis.QR.Generator.csprojResolveAssemblyReference.cache
+C:\Users\exo\Source\Repos\QRCode\QR\Exostasis.QR.Generator\obj\Debug\Exostasis.QR.Generator.dll
+C:\Users\exo\Source\Repos\QRCode\QR\Exostasis.QR.Generator\obj\Debug\Exostasis.QR.Generator.pdb

@@ -1,0 +1,12 @@
+C:\Users\exo\Source\Repos\QRCode\QR\Exostasis.QR.Gui\bin\Exostasis.QR.Gui.exe.config
+C:\Users\exo\Source\Repos\QRCode\QR\Exostasis.QR.Gui\bin\Exostasis.QR.Gui.exe
+C:\Users\exo\Source\Repos\QRCode\QR\Exostasis.QR.Gui\bin\Exostasis.QR.Gui.pdb
+C:\Users\exo\Source\Repos\QRCode\QR\Exostasis.QR.Gui\bin\Exostasis.QR.Generator.dll
+C:\Users\exo\Source\Repos\QRCode\QR\Exostasis.QR.Gui\bin\QREncoder.dll
+C:\Users\exo\Source\Repos\QRCode\QR\Exostasis.QR.Gui\bin\Exostasis.QR.Generator.pdb
+C:\Users\exo\Source\Repos\QRCode\QR\Exostasis.QR.Gui\bin\QREncoder.pdb
+C:\Users\exo\Source\Repos\QRCode\QR\Exostasis.QR.Gui\obj\Debug\Exostasis.QR.Gui.csprojResolveAssemblyReference.cache
+C:\Users\exo\Source\Repos\QRCode\QR\Exostasis.QR.Gui\obj\Debug\Exostasis.QR.Gui.Properties.Resources.resources
+C:\Users\exo\Source\Repos\QRCode\QR\Exostasis.QR.Gui\obj\Debug\Exostasis.QR.Gui.csproj.GenerateResource.Cache
+C:\Users\exo\Source\Repos\QRCode\QR\Exostasis.QR.Gui\obj\Debug\Exostasis.QR.Gui.exe
+C:\Users\exo\Source\Repos\QRCode\QR\Exostasis.QR.Gui\obj\Debug\Exostasis.QR.Gui.pdb
