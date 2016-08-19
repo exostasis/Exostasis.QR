@@ -7,8 +7,8 @@
     <ProjectGuid>{AB81BB4E-7A0E-442F-9040-B59C1D5292E9}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Exostasis.Equations</RootNamespace>
-    <AssemblyName>Exostasis.Equations</AssemblyName>
+    <RootNamespace>Exostasis.Polynomial</RootNamespace>
+    <AssemblyName>Exostasis.Polynomial</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -40,9 +40,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Equation.cs" />
+    <Compile Include="Polynomial.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Term.cs" />
+    <Compile Include="Variable.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
