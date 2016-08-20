@@ -9,14 +9,14 @@ namespace Exostasis.QR.Encoder
 {
     public class AlphanumericMode : EncoderBase
     {
-        public AlphanumericMode(string UnencodedString)
-        {
+        public AlphanumericMode(string unencodedString) : base (unencodedString)
+        {         
             _modeIndicator = new BitArray(BitConverter.GetBytes(0x02));
             _modeIndicator.Length = 4;           
             _dataPerBitString = 2;
-            _unencodedString = UnencodedString.ToUpper();
             _bitsPerBitString = 11;
             _maximumPossibleCharacterCount = 4926;
+            _unencodedString = unencodedString.ToUpper();
 
             if (_unencodedString.Length > _maximumPossibleCharacterCount)
             {
@@ -24,45 +24,43 @@ namespace Exostasis.QR.Encoder
             }
 
             base.DetermineMinimumVersionAndMaximumErrorCorrection();
-
-            _characterCountIndicator = new BitArray(BitConverter.GetBytes(_unencodedString.Length));
             _characterCountIndicator.Length = _bitsPerCharacterCountIndicator;
         }
 
         protected override List<BitArray> Encode()
         {
-            List<BitArray> ListBitArray = new List<BitArray>();
+            List<BitArray> bitArrays = new List<BitArray>();
 
             int length = _unencodedString.Length;
             int tempValue = 0;
 
-            Byte[] TempByteArray;
+            Byte[] tempBytes;
 
-            ListBitArray.Add(new BitArray(_modeIndicator));
-            ListBitArray.Add(new BitArray(_characterCountIndicator));       
+            bitArrays.Add(new BitArray(_modeIndicator));
+            bitArrays.Add(new BitArray(_characterCountIndicator));       
 
             for (int i = 0; i < _unencodedString.Length; i += 2)
             {
                 if (i + 1 >= _unencodedString.Length)
                 {
-                    ListBitArray.Add(new BitArray(6));
+                    bitArrays.Add(new BitArray(6));
                     tempValue = GetIntValueOfChar(_unencodedString.ElementAt(i));
                 }
                 else
                 {
-                    ListBitArray.Add(new BitArray(_bitsPerBitString));
+                    bitArrays.Add(new BitArray(_bitsPerBitString));
                     tempValue = GetIntValueOfChar(_unencodedString.ElementAt(i)) * 45 + GetIntValueOfChar(_unencodedString.ElementAt(i + 1));
                 }
 
-                TempByteArray = BitConverter.GetBytes(tempValue);
+                tempBytes = BitConverter.GetBytes(tempValue);
 
-                for (int j = 0; j < ListBitArray.Last().Count; j++)
+                for (int j = 0; j < bitArrays.Last().Count; j++)
                 {
-                    ListBitArray.Last().Set(j, ((TempByteArray[j/8] & (1 << (j % 8))) != 0));
+                    bitArrays.Last().Set(j, ((tempBytes[j/8] & (1 << (j % 8))) != 0));
                 }
             }
 
-            return ListBitArray;
+            return bitArrays;
         }
 
         protected override void DetermineBitsPerCharacterCountIndicator()

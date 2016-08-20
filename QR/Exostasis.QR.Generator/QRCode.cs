@@ -32,7 +32,7 @@ namespace Exostasis.QR.Generator
         
             if (Regex.IsMatch(_UnencodedString, NumericModeRegex))
             {
-                TheEncoder = new NumericMode();
+                TheEncoder = new NumericMode(_UnencodedString);
             }
             else if (Regex.IsMatch(_UnencodedString, AlphanumericModeRegex))
             {
@@ -40,7 +40,7 @@ namespace Exostasis.QR.Generator
             }
             else if (IsISO8859(_UnencodedString))
             {
-                TheEncoder = new ByteMode();
+                TheEncoder = new ByteMode(_UnencodedString);
             }
             else
             {

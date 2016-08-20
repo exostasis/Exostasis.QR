@@ -41,7 +41,6 @@ namespace Exostasis.QR.Encoder
 
         protected abstract void DetermineBitsPerCharacterCountIndicator();
 
-
         private int GetRequiredDataBits ()
         {
             return 8 * _CodewordTable[_version, (int)_errorCorrectionLevel];
@@ -95,7 +94,7 @@ namespace Exostasis.QR.Encoder
 
             for(int i = 0; i < numberOfBytesToAdd; ++ i)
             {
-                bitArray.Add(new BitArray(BitConverter.GetBytes(_padBytes[i % 2])));
+                bitArray.Add(new BitArray(BitConverter.GetBytes(_padBytes[i % 2]));
                 bitArray.Last().Length = 8;
             }
         }
@@ -159,6 +158,12 @@ namespace Exostasis.QR.Encoder
         protected int GetMaximumCharacterCount()
         {
             return ((GetRequiredDataBits() - 4 - _bitsPerCharacterCountIndicator) * _dataPerBitString / _bitsPerBitString);
+        }
+
+        public EncoderBase(string unencodedString)
+        {
+            _unencodedString = unencodedString;
+            _characterCountIndicator = new BitArray(BitConverter.GetBytes(_unencodedString.Length));
         }
 
         public Byte[] DataEncode()
