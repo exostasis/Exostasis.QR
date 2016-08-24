@@ -49,6 +49,10 @@
       <Project>{ceecdf34-be99-4b14-b420-2928f71b89a8}</Project>
       <Name>Exostasis.QR.Encoder</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Exostasis.QR.ErrorCorrection\Exostasis.QR.ErrorCorrection.csproj">
+      <Project>{10F14906-D6D2-4F29-AE15-F59FAF4EEE17}</Project>
+      <Name>Exostasis.QR.ErrorCorrection</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -4,20 +4,19 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{CEECDF34-BE99-4B14-B420-2928F71B89A8}</ProjectGuid>
+    <ProjectGuid>{10F14906-D6D2-4F29-AE15-F59FAF4EEE17}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>QREncoder</RootNamespace>
-    <AssemblyName>QREncoder</AssemblyName>
+    <RootNamespace>Exostasis.QR.ErrorCorrection</RootNamespace>
+    <AssemblyName>Exostasis.QR.ErrorCorrection</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -31,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Exostasis.Polynomial">
+      <HintPath>..\..\Polynomial\Exostasis.Polynomial\bin\Exostasis.Polynomial.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -41,12 +43,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AlphanumericMode.cs" />
-    <Compile Include="ByteMode.cs" />
-    <Compile Include="EncoderBase.cs" />
-    <Compile Include="Enum\ErrorCorretionLevel.cs" />
-    <Compile Include="NumericMode.cs" />
+    <Compile Include="ErrorCorrectionGenerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Exostasis.QR.Encoder\Exostasis.QR.Encoder.csproj">
+      <Project>{CEECDF34-BE99-4B14-B420-2928F71B89A8}</Project>
+      <Name>Exostasis.QR.Encoder</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

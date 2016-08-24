@@ -1,8 +1,9 @@
 ﻿using Exostasis.Polynomial.Extensions;
+using System;
 
 namespace Exostasis.Polynomial
 {
-    public class AlphaTerm
+    public class AlphaTerm : Object
     {
         public int _exponent { get; private set; }
         public Variable _variable { get; private set; }
@@ -48,14 +49,40 @@ namespace Exostasis.Polynomial
             return a1 + a2;
         }
 
-        public static bool operator== (AlphaTerm a1, AlphaTerm a2)
+        public override bool Equals (Object obj)
         {
-            return a1._variable == a2._variable;
+            if (obj == null)
+            {
+                return false;
+            }
+
+            AlphaTerm a1 = obj as AlphaTerm;
+            if (a1 == null)
+            {
+                return false;
+            }
+
+            return _exponent == a1._exponent && _variable.Equals(a1._variable);
         }
 
-        public static bool operator!= (AlphaTerm a1, AlphaTerm a2)
+        public bool EqualVariables (AlphaTerm a1)
         {
-            return !(a1 == a2);
+            if (a1 == null)
+            {
+                return false;
+            }
+
+            return _variable.Equals(a1._variable);
+        }
+
+        public bool EqualExponent(AlphaTerm a1)
+        {
+            if (a1 == null)
+            {
+                return false;
+            }
+
+            return _exponent == a1._exponent;
         }
     }
 }

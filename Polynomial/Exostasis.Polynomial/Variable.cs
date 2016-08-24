@@ -1,6 +1,8 @@
-﻿namespace Exostasis.Polynomial
+﻿using System;
+
+namespace Exostasis.Polynomial
 {
-    public class Variable
+    public class Variable : Object
     {
         public int _exponent { get; private set; }
         public string _variable { get; private set; }
@@ -22,14 +24,20 @@
             return new Variable(v1._variable, (v1._exponent + v2._exponent) ^ 256);
         }
 
-        public static bool operator== (Variable v1, Variable v2)
+        public override bool Equals (Object obj)
         {
-            return v1._exponent == v2._exponent && v1._variable.ToLower() == v2._variable.ToLower();
-        }
+            if (obj == null)
+            {
+                return false;
+            }
 
-        public static bool operator!= (Variable v1, Variable v2)
-        {
-            return !(v1 == v2);
+            Variable v1 = obj as Variable;
+            if (v1 == null)
+            {
+                return false;
+            }
+
+            return _exponent == v1._exponent && _variable.ToLower() == v1._variable.ToLower();
         }
     }
 }

@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Exostasis.QR.Generator", "E
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Exostasis.QR.Terminal", "Exostasis.QR.Terminal\Exostasis.QR.Terminal.csproj", "{4F43CBB9-17B4-4F4C-9572-11150297403A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Exostasis.QR.ErrorCorrection", "Exostasis.QR.ErrorCorrection\Exostasis.QR.ErrorCorrection.csproj", "{10F14906-D6D2-4F29-AE15-F59FAF4EEE17}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{4F43CBB9-17B4-4F4C-9572-11150297403A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4F43CBB9-17B4-4F4C-9572-11150297403A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4F43CBB9-17B4-4F4C-9572-11150297403A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10F14906-D6D2-4F29-AE15-F59FAF4EEE17}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10F14906-D6D2-4F29-AE15-F59FAF4EEE17}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10F14906-D6D2-4F29-AE15-F59FAF4EEE17}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10F14906-D6D2-4F29-AE15-F59FAF4EEE17}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

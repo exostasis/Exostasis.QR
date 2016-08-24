@@ -1,4 +1,5 @@
-﻿using System;
+﻿using QREncoder.Enum;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,11 +14,9 @@ namespace Exostasis.QR.Encoder
             { 1531, 1193, 871, 661 }, { 1631, 1267, 911, 701 }, { 1735, 1373, 985, 745 }, { 1843, 1455, 1033, 793 }, { 1955, 1541, 1115, 845 }, { 2071, 1631, 1171, 901 }, { 2191, 1725, 1231, 961 }, { 2306, 1812, 1286, 986 }, 
             { 2434, 1914, 1354, 1054 }, { 2566, 1992, 1426, 1096 }, { 2702, 2102, 1502, 1142 }, { 2812, 2216, 1582, 1222}, { 2956, 2334, 1666, 1276 } };
 
-        protected enum _ErrorCorrection { L, M, Q, H };
-
         private readonly Byte[] _padBytes = {0xEC, 0x11}; 
 
-        protected int _version { get; set; }
+        public int _version { get; protected set; }
 
         protected BitArray _characterCountIndicator { get; set; }
 
@@ -27,7 +26,7 @@ namespace Exostasis.QR.Encoder
 
         protected string _unencodedString { get; set; }
 
-        protected _ErrorCorrection _errorCorrectionLevel { get; set; }
+        public ErrorCorrectionLevel _errorCorrectionLevel { get; protected set; }
 
         protected int _dataPerBitString { get; set; }
 
@@ -94,7 +93,7 @@ namespace Exostasis.QR.Encoder
 
             for(int i = 0; i < numberOfBytesToAdd; ++ i)
             {
-                bitArray.Add(new BitArray(BitConverter.GetBytes(_padBytes[i % 2]));
+                bitArray.Add(new BitArray(BitConverter.GetBytes(_padBytes[i % 2])));
                 bitArray.Last().Length = 8;
             }
         }
@@ -130,9 +129,9 @@ namespace Exostasis.QR.Encoder
         {
             int MaximumLength = 0;
 
-            for (int i = (int)_ErrorCorrection.H; i <= 0; ++i)
+            for (int i = (int)ErrorCorrectionLevel.H; i <= 0; ++i)
             {
-                _errorCorrectionLevel = (_ErrorCorrection)i;
+                _errorCorrectionLevel = (ErrorCorrectionLevel)i;
 
                 for (int j = 0; j < 40; ++j)
                 {

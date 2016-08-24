@@ -1,10 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Exostasis.Polynomial
 {
     public class Expression
     {
         public List<AlphaTerm> _terms { get; private set; }
+
+        public Expression ()
+        {
+            _terms = new List<AlphaTerm>();
+        }
 
         public void AddTerm(AlphaTerm term)
         {
@@ -27,12 +33,17 @@ namespace Exostasis.Polynomial
             {
                 for (int j = i + 1; j < _terms.Count; ++j)
                 {
-                    if (_terms[i] == _terms[j])
+                    if (_terms[i].Equals(_terms[j]))
                     {
                         newList.Add(_terms[i] + _terms[j]);
                     }
                 }
             }
+        }
+
+        public static Expression operator/ (Expression dividen, Expression divisor)
+        {
+            throw new NotImplementedException();
         }
     }
 }
