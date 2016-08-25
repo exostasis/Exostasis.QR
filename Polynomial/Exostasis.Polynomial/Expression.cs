@@ -15,7 +15,10 @@ namespace Exostasis.Polynomial
         public void AddTerm(AlphaTerm term)
         {
             _terms.Add(term);
-            Reduce();
+            if (_terms.Count > 1)
+            {
+                Reduce();
+            }
         }
 
         public List<ConstantTerm> GetConstantExpression ()
@@ -25,25 +28,50 @@ namespace Exostasis.Polynomial
             return expression;
         }
 
-        private void Reduce()
+        public void Reduce()
         {
-            List<AlphaTerm> newList = new List<AlphaTerm>();
-
-            for (int i = 0; i < _terms.Count - 2; ++i)
+            for (int i = 0; i < _terms.Count; ++i)
             {
                 for (int j = i + 1; j < _terms.Count; ++j)
                 {
-                    if (_terms[i].Equals(_terms[j]))
+                    if (_terms[i].EqualVariables(_terms[j]))
                     {
-                        newList.Add(_terms[i] + _terms[j]);
+                        _terms[i] =  _terms[i] + _terms[j];
+                        _terms.RemoveAt(j--);
                     }
                 }
             }
         }
 
+        public static Expression operator* (Expression e1, Expression e2)
+        {
+            Expression result = new Expression();
+            foreach (AlphaTerm a1 in e1._terms)
+            {
+                foreach (AlphaTerm a2 in e2._terms)
+                {
+                    result.AddTerm(a1 * a2);
+                }
+            }
+
+            return result;
+        }
+
         public static Expression operator/ (Expression dividen, Expression divisor)
         {
             throw new NotImplementedException();
+        }
+
+        public void DisplayExpression()
+        {
+            foreach(AlphaTerm a in _terms)
+            {
+                a.DisplayAlphaTerm();
+                if (a != _terms[_terms.Count - 1])
+                {
+                    Console.Write(" + ");
+                }
+            }
         }
     }
 }

@@ -21,7 +21,11 @@ namespace Exostasis.Polynomial
 
         public static Variable operator* (Variable v1, Variable v2)
         {
-            return new Variable(v1._variable, (v1._exponent + v2._exponent) ^ 256);
+            if (v1._variable.ToLower() != v2._variable.ToLower())
+            {
+                throw new Exception("Cannot times to variables that don't have the same base");
+            }
+            return new Variable(v1._variable, (v1._exponent + v2._exponent) % 256);
         }
 
         public override bool Equals (Object obj)
@@ -38,6 +42,11 @@ namespace Exostasis.Polynomial
             }
 
             return _exponent == v1._exponent && _variable.ToLower() == v1._variable.ToLower();
+        }
+
+        public void DisplayVariable()
+        {
+            Console.Write(_variable + " ^(" + _exponent + ")");
         }
     }
 }

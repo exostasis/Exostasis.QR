@@ -36,12 +36,12 @@ namespace Exostasis.Polynomial
 
         public static AlphaTerm operator* (AlphaTerm a1, AlphaTerm a2)
         {
-            return new AlphaTerm((a1._exponent + a2._exponent) ^ 256);
+            return new AlphaTerm((a1._exponent + a2._exponent) % 256, a1._variable * a2._variable);
         }
 
         public static AlphaTerm operator+ (AlphaTerm a1, AlphaTerm a2)
         {
-            return (a1.AntiLog() ^ a2.AntiLog()).Log();
+            return (a1.AntiLog() ^ a2.AntiLog()).Log(a1._variable._variable, a1._variable._exponent);
         }
 
         public static AlphaTerm operator- (AlphaTerm a1, AlphaTerm a2)
@@ -83,6 +83,12 @@ namespace Exostasis.Polynomial
             }
 
             return _exponent == a1._exponent;
+        }
+
+        public void DisplayAlphaTerm()
+        {
+            Console.Write("a ^ (" + _exponent + ") ");
+            _variable.DisplayVariable();
         }
     }
 }

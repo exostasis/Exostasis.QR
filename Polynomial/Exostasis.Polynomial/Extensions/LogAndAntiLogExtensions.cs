@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Exostasis.Polynomial.Extensions
@@ -39,35 +40,13 @@ namespace Exostasis.Polynomial.Extensions
             return value;
         }
 
-        public static AlphaTerm Log(this int self)
-        {
-            AlphaTerm value = null;
-
-            if (_logs.ContainsKey(self))
-            {
-                return _logs[self];
-            }
-
-            for (int i = 0; i <= 255; ++i)
-            {
-                value = new AlphaTerm(i);
-
-                if (value.AntiLog() == self)
-                {
-                    break;
-                }
-            }
-
-            return value;
-        }
-
         public static AlphaTerm Log(this int self, string variable, int exponent)
         {
             AlphaTerm value = null;
 
             if (_logs.ContainsKey(self))
             {
-                return _logs[self];
+                return new AlphaTerm(_logs[self]._exponent, variable, exponent);
             }
 
             for (int i = 0; i <= 255; ++i)

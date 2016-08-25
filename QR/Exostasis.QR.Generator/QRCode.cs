@@ -36,7 +36,7 @@ namespace Exostasis.QR.Generator
             _EncodedArray = _QREncoder.DataEncode();
             _version = _QREncoder._version;
             _errorCorrectionLevel = _QREncoder._errorCorrectionLevel;
-            _QRErrorGenerator = new ErrorCorrectionGenerator(_EncodedArray);
+            _QRErrorGenerator = new ErrorCorrectionGenerator(_EncodedArray, _version, _errorCorrectionLevel);
         }
 
         private EncoderBase DataAnalyse ()
