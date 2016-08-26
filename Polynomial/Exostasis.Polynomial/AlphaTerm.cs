@@ -24,6 +24,12 @@ namespace Exostasis.Polynomial
             _variable = variable;
         }
 
+        public AlphaTerm(AlphaTerm a1)
+        {
+            _exponent = a1._exponent;
+            _variable = new Variable(a1._variable);
+        }
+
         public ConstantTerm ToConstantTerm ()
         {
             return new ConstantTerm(this.AntiLog(), _variable);
@@ -41,7 +47,14 @@ namespace Exostasis.Polynomial
 
         public static AlphaTerm operator+ (AlphaTerm a1, AlphaTerm a2)
         {
-            return (a1.AntiLog() ^ a2.AntiLog()).Log(a1._variable._variable, a1._variable._exponent);
+            int temp = (a1.AntiLog() ^ a2.AntiLog());
+
+            if (temp != 0)
+            {
+                return temp.Log(a1._variable._variable, a1._variable._exponent);
+            }
+
+            return null;
         }
 
         public static AlphaTerm operator- (AlphaTerm a1, AlphaTerm a2)
@@ -87,7 +100,7 @@ namespace Exostasis.Polynomial
 
         public void DisplayAlphaTerm()
         {
-            Console.Write("a ^ (" + _exponent + ") ");
+            Console.Write("a^(" + _exponent + ")");
             _variable.DisplayVariable();
         }
     }

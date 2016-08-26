@@ -1,4 +1,6 @@
-﻿namespace Exostasis.Polynomial
+﻿using System;
+
+namespace Exostasis.Polynomial
 { 
     public class ConstantTerm
     {
@@ -18,6 +20,11 @@
         public ConstantTerm (int constant, Variable variable) : this(constant)
         {
             _variable = variable;
+        }
+
+        public Byte ToByte ()
+        {
+            return Convert.ToByte(_constant);
         }
     }
 }

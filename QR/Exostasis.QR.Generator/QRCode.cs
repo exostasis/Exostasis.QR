@@ -9,14 +9,14 @@ namespace Exostasis.QR.Generator
 {
     public class QRCode
     {
-        private string _UnencodedString { get; set; }
+        private string _unencodedString { get; set; }
 
-        private Byte[] _EncodedArray { get; set; }
-        private Byte[] _ErrorCorrectionArray { get; set; }
+        private Byte[] _encodedArray { get; set; }
+        private Byte[] _errorCorrectionArray { get; set; }
 
-        private EncoderBase _QREncoder { get; set; }
+        private EncoderBase _qREncoder { get; set; }
 
-        private ErrorCorrectionGenerator _QRErrorGenerator { get; set; }
+        private ErrorCorrectionGenerator _qRErrorGenerator { get; set; }
 
         private const string NumericModeRegex = "^[0-9]+$";
         private const string AlphanumericModeRegex = "^[0-9a-z$%*+-./:]+$";
@@ -27,33 +27,34 @@ namespace Exostasis.QR.Generator
 
         public QRCode(string UnencodedString)
         {
-            _UnencodedString = UnencodedString;
+            _unencodedString = UnencodedString;
         }
 
         public void Generate ()
         {
-            _QREncoder = DataAnalyse();
-            _EncodedArray = _QREncoder.DataEncode();
-            _version = _QREncoder._version;
-            _errorCorrectionLevel = _QREncoder._errorCorrectionLevel;
-            _QRErrorGenerator = new ErrorCorrectionGenerator(_EncodedArray, _version, _errorCorrectionLevel);
+            _qREncoder = DataAnalyse();
+            _encodedArray = _qREncoder.DataEncode();
+            _version = _qREncoder._version;
+            _errorCorrectionLevel = _qREncoder._errorCorrectionLevel;
+            _qRErrorGenerator = new ErrorCorrectionGenerator(_encodedArray, _version, _errorCorrectionLevel);
+            _errorCorrectionArray = _qRErrorGenerator.GenerateErrorCorrectionArray();
         }
 
         private EncoderBase DataAnalyse ()
         {
             EncoderBase TheEncoder;
         
-            if (Regex.IsMatch(_UnencodedString, NumericModeRegex))
+            if (Regex.IsMatch(_unencodedString, NumericModeRegex))
             {
-                TheEncoder = new NumericMode(_UnencodedString);
+                TheEncoder = new NumericMode(_unencodedString);
             }
-            else if (Regex.IsMatch(_UnencodedString, AlphanumericModeRegex))
+            else if (Regex.IsMatch(_unencodedString, AlphanumericModeRegex))
             {
-                TheEncoder = new AlphanumericMode(_UnencodedString);
+                TheEncoder = new AlphanumericMode(_unencodedString);
             }
-            else if (IsISO8859(_UnencodedString))
+            else if (IsISO8859(_unencodedString))
             {
-                TheEncoder = new ByteMode(_UnencodedString);
+                TheEncoder = new ByteMode(_unencodedString);
             }
             else
             {

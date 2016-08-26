@@ -19,6 +19,12 @@ namespace Exostasis.Polynomial
             _variable = variable;
         }
 
+        public Variable (Variable v1)
+        {
+            _exponent = v1._exponent;
+            _variable = v1._variable;
+        }
+
         public static Variable operator* (Variable v1, Variable v2)
         {
             if (v1._variable.ToLower() != v2._variable.ToLower())
@@ -46,7 +52,7 @@ namespace Exostasis.Polynomial
 
         public void DisplayVariable()
         {
-            Console.Write(_variable + " ^(" + _exponent + ")");
+            Console.Write(_variable + "^(" + _exponent + ")");
         }
     }
 }
