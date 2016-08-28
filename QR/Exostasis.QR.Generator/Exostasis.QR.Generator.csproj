@@ -45,6 +45,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Exostasis.QR.Common\Exostasis.QR.Common.csproj">
+      <Project>{582628B9-CD10-4F1D-8C2D-38F5B9433EF5}</Project>
+      <Name>Exostasis.QR.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Exostasis.QR.Encoder\Exostasis.QR.Encoder.csproj">
       <Project>{ceecdf34-be99-4b14-b420-2928f71b89a8}</Project>
       <Name>Exostasis.QR.Encoder</Name>
@@ -52,6 +56,10 @@
     <ProjectReference Include="..\Exostasis.QR.ErrorCorrection\Exostasis.QR.ErrorCorrection.csproj">
       <Project>{10F14906-D6D2-4F29-AE15-F59FAF4EEE17}</Project>
       <Name>Exostasis.QR.ErrorCorrection</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Exostasis.QR.Structurer\Exostasis.QR.Structurer.csproj">
+      <Project>{7D3F1A6B-91ED-41DA-BE45-4F8C362F728D}</Project>
+      <Name>Exostasis.QR.Structurer</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

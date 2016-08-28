@@ -1,8 +1,6 @@
-﻿using QREncoder.Enum;
-using Exostasis.Polynomial;
+﻿using Exostasis.Polynomial;
 using System;
 using Exostasis.Polynomial.Extensions;
-using Exostasis.QR.Common;
 using System.Linq;
 
 namespace Exostasis.QR.ErrorCorrection
@@ -17,10 +15,10 @@ namespace Exostasis.QR.ErrorCorrection
         private Expression _errorCorrectionExp { get; set; }
         private Expression _messageExp { get; set; }
 
-        public ErrorCorrectionGenerator (Byte[] encodedArray, int version, ErrorCorrectionLevel errorCorrectionLevel)
+        public ErrorCorrectionGenerator (Byte[] encodedArray, int errorCorrectionCodeWordsPerBlock)
         {
             _encodedArray = encodedArray;                        
-            _errorCorrectionCodeWordsPerBlock = Constants._requiredErrorCorrectionCodesPerBlock[version, (int)errorCorrectionLevel];         
+            _errorCorrectionCodeWordsPerBlock = errorCorrectionCodeWordsPerBlock;         
         }
 
         public Byte[] GenerateErrorCorrectionArray()

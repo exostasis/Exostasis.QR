@@ -4,20 +4,19 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{CEECDF34-BE99-4B14-B420-2928F71B89A8}</ProjectGuid>
+    <ProjectGuid>{7D3F1A6B-91ED-41DA-BE45-4F8C362F728D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>QREncoder</RootNamespace>
-    <AssemblyName>QREncoder</AssemblyName>
+    <RootNamespace>Exostasis.QR.Structurer</RootNamespace>
+    <AssemblyName>Exostasis.QR.Structurer</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -41,16 +40,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AlphanumericMode.cs" />
-    <Compile Include="ByteMode.cs" />
-    <Compile Include="EncoderBase.cs" />
-    <Compile Include="NumericMode.cs" />
+    <Compile Include="Block.cs" />
+    <Compile Include="Group.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StructureGenerator.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Exostasis.QR.Common\Exostasis.QR.Common.csproj">
-      <Project>{582628B9-CD10-4F1D-8C2D-38F5B9433EF5}</Project>
+      <Project>{582628b9-cd10-4f1d-8c2d-38f5b9433ef5}</Project>
       <Name>Exostasis.QR.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Exostasis.QR.ErrorCorrection\Exostasis.QR.ErrorCorrection.csproj">
+      <Project>{10f14906-d6d2-4f29-ae15-f59faf4eee17}</Project>
+      <Name>Exostasis.QR.ErrorCorrection</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

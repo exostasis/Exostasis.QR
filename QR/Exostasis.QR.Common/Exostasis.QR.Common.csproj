@@ -40,7 +40,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AligmentCordArray.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="Enum\ErrorCorretionLevel.cs" />
+    <Compile Include="Extensions\ArrayExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

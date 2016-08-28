@@ -1,5 +1,5 @@
 ﻿using Exostasis.QR.Common;
-using QREncoder.Enum;
+using Exostasis.QR.Common.Enum;
 using System;
 using System.Collections;
 using System.Collections.Generic;

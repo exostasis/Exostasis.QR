@@ -32,5 +32,17 @@
             { 795, 627, 445, 341 }, { 861, 669, 485, 385 }, { 932, 714, 512, 406 }, { 1006, 782, 568, 442 }, { 1094, 860, 614, 464 }, { 1174, 914, 664, 514 }, { 1276, 1000, 718, 538 }, { 1370, 1062, 754, 596 }, { 1468, 1128, 808, 628 },
             { 1531, 1193, 871, 661 }, { 1631, 1267, 911, 701 }, { 1735, 1373, 985, 745 }, { 1843, 1455, 1033, 793 }, { 1955, 1541, 1115, 845 }, { 2071, 1631, 1171, 901 }, { 2191, 1725, 1231, 961 }, { 2306, 1812, 1286, 986 },
             { 2434, 1914, 1354, 1054 }, { 2566, 1992, 1426, 1096 }, { 2702, 2102, 1502, 1142 }, { 2812, 2216, 1582, 1222}, { 2956, 2334, 1666, 1276 } };
+
+        public static readonly int[] _remainderBitsRequired = { 0, 7, 7, 7, 7, 7, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 3, 3, 3, 3, 3, 3, 3, 0, 0, 0, 0, 0, 0 };
+
+        public static readonly AlignmentCordArray[] _alignmentCords = { new AlignmentCordArray(0, 0) , new AlignmentCordArray(6, 18), new AlignmentCordArray(6, 22), new AlignmentCordArray(6, 26), new AlignmentCordArray(6, 30),
+            new AlignmentCordArray(6, 34), new AlignmentCordArray(6, 22, 38), new AlignmentCordArray(6, 22, 42), new AlignmentCordArray(6, 26, 46), new AlignmentCordArray(6, 28, 50), new AlignmentCordArray(6, 30, 54),
+            new AlignmentCordArray(6, 32, 58), new AlignmentCordArray(6, 34, 62), new AlignmentCordArray(6, 26, 46, 66), new AlignmentCordArray(6, 26, 48, 70), new AlignmentCordArray(6, 26, 50, 74), new AlignmentCordArray(6, 30, 54, 78),
+            new AlignmentCordArray(6, 30, 56, 82), new AlignmentCordArray(6, 30, 58, 86), new AlignmentCordArray(6, 34, 62, 90), new AlignmentCordArray(6, 28, 50, 72, 94), new AlignmentCordArray(6, 26, 50, 74, 98),
+            new AlignmentCordArray(6, 30, 54, 78, 102), new AlignmentCordArray(6, 28, 54, 80, 106), new AlignmentCordArray( 6, 32, 58, 84, 110), new AlignmentCordArray(6, 30, 58, 86, 114), new AlignmentCordArray(6, 34, 62, 90, 118),
+            new AlignmentCordArray(6, 26, 50, 74, 98, 122), new AlignmentCordArray(6, 30, 54, 78, 102, 126), new AlignmentCordArray(6, 26, 52, 78, 104, 130), new AlignmentCordArray(6, 30, 56, 82, 108, 134),
+            new AlignmentCordArray(6, 34, 60, 86, 112, 138), new AlignmentCordArray(6, 30, 58, 86, 114, 142), new AlignmentCordArray(6, 34, 62, 90, 118, 146), new AlignmentCordArray(6, 30, 54, 78, 102, 126, 150),
+            new AlignmentCordArray(6, 24, 50, 76, 102, 128, 154), new AlignmentCordArray(6, 28, 54, 80, 106, 132, 158), new AlignmentCordArray(6, 32, 58, 84, 110, 136, 162), new AlignmentCordArray(6, 26, 54, 82, 110, 138, 166),
+            new AlignmentCordArray(6, 30, 58, 86, 114, 142, 170)};
     }
 }

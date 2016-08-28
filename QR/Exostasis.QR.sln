@@ -15,6 +15,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Exostasis.QR.ErrorCorrectio
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Exostasis.QR.Common", "Exostasis.QR.Common\Exostasis.QR.Common.csproj", "{582628B9-CD10-4F1D-8C2D-38F5B9433EF5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Exostasis.QR.Structurer", "Exostasis.QR.Structurer\Exostasis.QR.Structurer.csproj", "{7D3F1A6B-91ED-41DA-BE45-4F8C362F728D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Exostasis.QR.Image", "Exostasis.QR.Image\Exostasis.QR.Image.csproj", "{BF294614-9FC0-4C22-BBC5-62FD4521F49B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +49,14 @@ Global
 		{582628B9-CD10-4F1D-8C2D-38F5B9433EF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{582628B9-CD10-4F1D-8C2D-38F5B9433EF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{582628B9-CD10-4F1D-8C2D-38F5B9433EF5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7D3F1A6B-91ED-41DA-BE45-4F8C362F728D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D3F1A6B-91ED-41DA-BE45-4F8C362F728D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D3F1A6B-91ED-41DA-BE45-4F8C362F728D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D3F1A6B-91ED-41DA-BE45-4F8C362F728D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF294614-9FC0-4C22-BBC5-62FD4521F49B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF294614-9FC0-4C22-BBC5-62FD4521F49B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF294614-9FC0-4C22-BBC5-62FD4521F49B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF294614-9FC0-4C22-BBC5-62FD4521F49B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
