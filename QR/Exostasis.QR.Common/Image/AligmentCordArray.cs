@@ -1,4 +1,4 @@
-﻿namespace Exostasis.QR.Common
+﻿namespace Exostasis.QR.Common.Image
 {
     public class AlignmentCordArray
     {

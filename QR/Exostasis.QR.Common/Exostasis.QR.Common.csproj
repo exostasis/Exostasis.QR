@@ -40,8 +40,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AligmentCordArray.cs" />
+    <Compile Include="Image\AligmentCordArray.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="Image\Cord.cs" />
     <Compile Include="Enum\ErrorCorretionLevel.cs" />
     <Compile Include="Extensions\ArrayExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

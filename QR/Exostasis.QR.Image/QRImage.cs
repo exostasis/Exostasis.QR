@@ -1,4 +1,6 @@
-﻿namespace Exostasis.QR.Image
+﻿using Exostasis.QR.Common.Image;
+
+namespace Exostasis.QR.Image
 {
     public class QRImage
     {

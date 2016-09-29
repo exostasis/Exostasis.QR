@@ -1,6 +1,5 @@
 ﻿using Exostasis.QR.Common.Enum;
 using Exostasis.QR.Encoder;
-using Exostasis.QR.ErrorCorrection;
 using Exostasis.QR.Structurer;
 using System;
 using System.Collections;

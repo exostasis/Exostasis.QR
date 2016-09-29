@@ -1,4 +1,6 @@
-﻿namespace Exostasis.QR.Common
+﻿using Exostasis.QR.Common.Image;
+
+namespace Exostasis.QR.Common
 {
     public static class Constants
     {
@@ -43,6 +45,6 @@
             new AlignmentCordArray(6, 26, 50, 74, 98, 122), new AlignmentCordArray(6, 30, 54, 78, 102, 126), new AlignmentCordArray(6, 26, 52, 78, 104, 130), new AlignmentCordArray(6, 30, 56, 82, 108, 134),
             new AlignmentCordArray(6, 34, 60, 86, 112, 138), new AlignmentCordArray(6, 30, 58, 86, 114, 142), new AlignmentCordArray(6, 34, 62, 90, 118, 146), new AlignmentCordArray(6, 30, 54, 78, 102, 126, 150),
             new AlignmentCordArray(6, 24, 50, 76, 102, 128, 154), new AlignmentCordArray(6, 28, 54, 80, 106, 132, 158), new AlignmentCordArray(6, 32, 58, 84, 110, 136, 162), new AlignmentCordArray(6, 26, 54, 82, 110, 138, 166),
-            new AlignmentCordArray(6, 30, 58, 86, 114, 142, 170)};
+            new AlignmentCordArray(6, 30, 58, 86, 114, 142, 170) };
     }
 }

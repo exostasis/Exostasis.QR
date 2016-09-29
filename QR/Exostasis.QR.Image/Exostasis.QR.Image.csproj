@@ -40,9 +40,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Cord.cs" />
+    <Compile Include="AlignmentPatter.cs" />
+    <Compile Include="Element.cs" />
+    <Compile Include="FinderPattern.cs" />
+    <Compile Include="Module.cs" />
     <Compile Include="QRImage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Exostasis.QR.Common\Exostasis.QR.Common.csproj">
+      <Project>{582628B9-CD10-4F1D-8C2D-38F5B9433EF5}</Project>
+      <Name>Exostasis.QR.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
