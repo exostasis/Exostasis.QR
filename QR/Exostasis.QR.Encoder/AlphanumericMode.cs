@@ -47,7 +47,8 @@ namespace Exostasis.QR.Encoder
                 else
                 {
                     bitArrays.Add(new BitArray(_bitsPerBitString));
-                    tempValue = GetIntValueOfChar(_unencodedString.ElementAt(i)) * 45 + GetIntValueOfChar(_unencodedString.ElementAt(i + 1));
+                    tempValue = GetIntValueOfChar(_unencodedString.ElementAt(i)) * 45 + 
+                        GetIntValueOfChar(_unencodedString.ElementAt(i + 1));
                 }
 
                 tempBytes = BitConverter.GetBytes(tempValue);

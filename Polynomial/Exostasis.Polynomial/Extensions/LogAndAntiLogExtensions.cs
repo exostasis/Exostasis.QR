@@ -34,11 +34,11 @@ namespace Exostasis.Polynomial.Extensions
                 {
                     _logs.Add(value, self);
                 }
-            }
+            }            
 
             return value;
         }
-
+        
         public static AlphaTerm Log(this int self, string variable, int exponent)
         {
             AlphaTerm value = null;
