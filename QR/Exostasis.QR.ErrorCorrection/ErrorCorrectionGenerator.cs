@@ -1,5 +1,4 @@
 ﻿using Exostasis.Polynomial;
-using System;
 using Exostasis.Polynomial.Extensions;
 using System.Linq;
 
@@ -7,27 +6,26 @@ namespace Exostasis.QR.ErrorCorrection
 {
     public class ErrorCorrectionGenerator
     {
-        private Byte[] _errorCorrectionArray { get; set; }
-        private Byte[] _encodedArray { get; set; }
+        private byte[] EncodedArray { get; set; }
 
-        private int _errorCorrectionCodeWordsPerBlock { get; set; }
+        private int ErrorCorrectionCodeWordsPerBlock { get; set; }
 
-        private Expression _errorCorrectionExp { get; set; }
-        private Expression _messageExp { get; set; }
+        private Expression ErrorCorrectionExp { get; set; }
+        private Expression MessageExp { get; set; }
 
-        public ErrorCorrectionGenerator (Byte[] encodedArray, int errorCorrectionCodeWordsPerBlock)
+        public ErrorCorrectionGenerator (byte[] encodedArray, int errorCorrectionCodeWordsPerBlock)
         {
-            _encodedArray = encodedArray;                        
-            _errorCorrectionCodeWordsPerBlock = errorCorrectionCodeWordsPerBlock;         
+            EncodedArray = encodedArray;                        
+            ErrorCorrectionCodeWordsPerBlock = errorCorrectionCodeWordsPerBlock;         
         }
 
-        public Byte[] GenerateErrorCorrectionArray()
+        public byte[] GenerateErrorCorrectionArray()
         {
              CreateMessageExpression();
             GenerateErrorCorrectionExpression();
-            _messageExp = _messageExp * new AlphaTerm(0, "x", _errorCorrectionCodeWordsPerBlock);
+            MessageExp = MessageExp * new AlphaTerm(0, "x", ErrorCorrectionCodeWordsPerBlock);
 
-            Expression results = _messageExp / _errorCorrectionExp;
+            Expression results = MessageExp / ErrorCorrectionExp;
             var temp = results.GetConstantExpression();
             var bytes = temp.Select(term => term.ToByte());
 
@@ -36,13 +34,13 @@ namespace Exostasis.QR.ErrorCorrection
 
         private void CreateMessageExpression ()
         {
-            _messageExp = new Expression();
-            for (int i = 0; i < _encodedArray.Length; ++i)
+            MessageExp = new Expression();
+            for (int i = 0; i < EncodedArray.Length; ++i)
             {
-                int temp = _encodedArray[i];
+                int temp = EncodedArray[i];
                 if (temp != 0)
                 {
-                    _messageExp.AddTerm(temp.Log("x", _encodedArray.Length - i - 1));
+                    MessageExp.AddTerm(temp.Log("x", EncodedArray.Length - i - 1));
                 }
             }
         }
@@ -59,7 +57,7 @@ namespace Exostasis.QR.ErrorCorrection
 
             Expression results = startExpression1 * startExpression2;
             
-            for (int i = 2; i < _errorCorrectionCodeWordsPerBlock; ++ i)
+            for (int i = 2; i < ErrorCorrectionCodeWordsPerBlock; ++ i)
             {
                 Expression tempExp = new Expression();
                 tempExp.AddTerm(new AlphaTerm(0, "x", 1));
@@ -68,7 +66,7 @@ namespace Exostasis.QR.ErrorCorrection
                 results = results * tempExp;
             }
 
-            _errorCorrectionExp = results;
+            ErrorCorrectionExp = results;
         }
     }
 }

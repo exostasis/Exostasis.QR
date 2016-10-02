@@ -9,53 +9,53 @@ namespace Exostasis.QR.Encoder
     {
         public AlphanumericMode(string unencodedString) : base (unencodedString)
         {         
-            _modeIndicator = new BitArray(BitConverter.GetBytes(0x02));
-            _modeIndicator.Length = 4;           
-            _dataPerBitString = 2;
-            _bitsPerBitString = 11;
-            _maximumPossibleCharacterCount = 4926;
-            _unencodedString = unencodedString.ToUpper();
+            ModeIndicator = new BitArray(BitConverter.GetBytes(0x02));
+            ModeIndicator.Length = 4;           
+            DataPerBitString = 2;
+            BitsPerBitString = 11;
+            MaximumPossibleCharacterCount = 4926;
+            UnencodedString = unencodedString.ToUpper();
 
-            if (_unencodedString.Length > _maximumPossibleCharacterCount)
+            if (UnencodedString.Length > MaximumPossibleCharacterCount)
             {
                 throw new Exception("This string is unable to be converted into a qr code due to the length of it");
             }
 
-            base.DetermineMinimumVersionAndMaximumErrorCorrection();
-            _characterCountIndicator.Length = _bitsPerCharacterCountIndicator;
+            DetermineMinimumVersionAndMaximumErrorCorrection();
+            CharacterCountIndicator.Length = BitsPerCharacterCountIndicator;
         }
 
         protected override List<BitArray> Encode()
         {
             List<BitArray> bitArrays = new List<BitArray>();
 
-            int length = _unencodedString.Length;
+            int length = UnencodedString.Length;
             int tempValue = 0;
 
-            Byte[] tempBytes;
+            byte[] tempBytes;
 
-            bitArrays.Add(new BitArray(_modeIndicator));
-            bitArrays.Add(new BitArray(_characterCountIndicator));       
+            bitArrays.Add(new BitArray(ModeIndicator));
+            bitArrays.Add(new BitArray(CharacterCountIndicator));       
 
-            for (int i = 0; i < _unencodedString.Length; i += 2)
+            for (int i = 0; i < UnencodedString.Length; i += 2)
             {
-                if (i + 1 >= _unencodedString.Length)
+                if (i + 1 >= UnencodedString.Length)
                 {
                     bitArrays.Add(new BitArray(6));
-                    tempValue = GetIntValueOfChar(_unencodedString.ElementAt(i));
+                    tempValue = GetIntValueOfChar(UnencodedString.ElementAt(i));
                 }
                 else
                 {
-                    bitArrays.Add(new BitArray(_bitsPerBitString));
-                    tempValue = GetIntValueOfChar(_unencodedString.ElementAt(i)) * 45 + 
-                        GetIntValueOfChar(_unencodedString.ElementAt(i + 1));
+                    bitArrays.Add(new BitArray(BitsPerBitString));
+                    tempValue = GetIntValueOfChar(UnencodedString.ElementAt(i)) * 45 + 
+                        GetIntValueOfChar(UnencodedString.ElementAt(i + 1));
                 }
 
                 tempBytes = BitConverter.GetBytes(tempValue);
 
                 for (int j = 0; j < bitArrays.Last().Count; j++)
                 {
-                    bitArrays.Last().Set(j, ((tempBytes[j/8] & (1 << (j % 8))) != 0));
+                    bitArrays.Last().Set(j, (tempBytes[j/8] & (1 << (j % 8))) != 0);
                 }
             }
 
@@ -64,16 +64,16 @@ namespace Exostasis.QR.Encoder
 
         protected override void DetermineBitsPerCharacterCountIndicator()
         {
-            switch (_version)
+            switch (Version)
             {
                 case 0:
-                    _bitsPerCharacterCountIndicator = 9;
+                    BitsPerCharacterCountIndicator = 9;
                     break;
                 case 9:
-                    _bitsPerCharacterCountIndicator = 11;
+                    BitsPerCharacterCountIndicator = 11;
                     break;
                 case 26:
-                    _bitsPerCharacterCountIndicator = 13;
+                    BitsPerCharacterCountIndicator = 13;
                     break;
             }
         }

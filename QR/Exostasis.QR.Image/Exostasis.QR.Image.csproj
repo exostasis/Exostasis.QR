@@ -32,6 +32,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -40,12 +41,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AlignmentPatter.cs" />
+    <Compile Include="AlignmentPattern.cs" />
     <Compile Include="Element.cs" />
     <Compile Include="FinderPattern.cs" />
     <Compile Include="Module.cs" />
-    <Compile Include="QRImage.cs" />
+    <Compile Include="QrImage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Seperator.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Exostasis.QR.Common\Exostasis.QR.Common.csproj">

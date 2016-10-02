@@ -9,27 +9,27 @@ namespace Exostasis.QR.Encoder
 {
     public abstract class EncoderBase
     {
-        private readonly Byte[] _padBytes = {0xEC, 0x11}; 
+        private readonly byte[] _padBytes = {0xEC, 0x11}; 
 
-        public int _version { get; protected set; }
+        public int Version { get; protected set; }
 
-        protected BitArray _characterCountIndicator { get; set; }
+        protected BitArray CharacterCountIndicator { get; set; }
 
-        protected BitArray _modeIndicator { get; set; }
+        protected BitArray ModeIndicator { get; set; }
 
-        protected Byte[] _encodedBytes { get; private set; }
+        protected byte[] EncodedBytes { get; private set; }
 
-        protected string _unencodedString { get; set; }
+        protected string UnencodedString { get; set; }
 
-        public ErrorCorrectionLevel _errorCorrectionLevel { get; protected set; }
+        public ErrorCorrectionLevel ErrorCorrectionLevel { get; protected set; }
 
-        protected int _dataPerBitString { get; set; }
+        protected int DataPerBitString { get; set; }
 
-        protected int _bitsPerBitString { get; set; }
+        protected int BitsPerBitString { get; set; }
 
-        protected int _bitsPerCharacterCountIndicator { get; set; }
+        protected int BitsPerCharacterCountIndicator { get; set; }
 
-        protected int _maximumPossibleCharacterCount { get; set; }
+        protected int MaximumPossibleCharacterCount { get; set; }
 
         protected abstract List<BitArray> Encode();
 
@@ -37,7 +37,7 @@ namespace Exostasis.QR.Encoder
 
         private int GetRequiredDataBits ()
         {
-            return 8 * Constants._codewordTable[_version, (int)_errorCorrectionLevel];
+            return 8 * Constants.CodewordTable[Version, (int)ErrorCorrectionLevel];
         }
 
         private int GetDifferenceBetweenRequiredVsActual (List<BitArray> bitArray)
@@ -73,11 +73,11 @@ namespace Exostasis.QR.Encoder
         private void MakeMultipleOf8(List<BitArray> bitArray)
         {
             int dataBitCount = CalculateListBitArrayDataBitCount(bitArray);
-            int numberOf0sToAdd = 8 - (dataBitCount % 8);
+            int numberOf0SToAdd = 8 - dataBitCount % 8;
 
-            if (numberOf0sToAdd > 0)
+            if (numberOf0SToAdd > 0)
             {
-                bitArray.Add(new BitArray(numberOf0sToAdd));
+                bitArray.Add(new BitArray(numberOf0SToAdd));
             }
         }
 
@@ -93,9 +93,9 @@ namespace Exostasis.QR.Encoder
             }
         }
 
-        private Byte[] ConvertListBitArrayToByteArray(List<BitArray> bitArray)
+        private byte[] ConvertListBitArrayToByteArray(List<BitArray> bitArray)
         {
-            List <Byte> bytes = new List<Byte>();
+            List <byte> bytes = new List<byte>();
             int currentSpot = 7;
             int tempByte = 0;
 
@@ -122,27 +122,27 @@ namespace Exostasis.QR.Encoder
 
         protected void DetermineMinimumVersionAndMaximumErrorCorrection()
         {
-            int MaximumLength = 0;
+            int maximumLength = 0;
 
             for (int i = (int)ErrorCorrectionLevel.H; i <= 0; ++i)
             {
-                _errorCorrectionLevel = (ErrorCorrectionLevel)i;
+                ErrorCorrectionLevel = (ErrorCorrectionLevel)i;
 
                 for (int j = 0; j < 40; ++j)
                 {
-                    _version = j;
+                    Version = j;
 
                     DetermineBitsPerCharacterCountIndicator();
 
-                    MaximumLength = GetMaximumCharacterCount();
+                    maximumLength = GetMaximumCharacterCount();
 
-                    if (MaximumLength >= _unencodedString.Length)
+                    if (maximumLength >= UnencodedString.Length)
                     {
                         break;
                     }
                 }
 
-                if (MaximumLength >= _unencodedString.Length)
+                if (maximumLength >= UnencodedString.Length)
                 {
                     break;
                 }
@@ -151,25 +151,25 @@ namespace Exostasis.QR.Encoder
 
         protected int GetMaximumCharacterCount()
         {
-            return ((GetRequiredDataBits() - 4 - _bitsPerCharacterCountIndicator) * _dataPerBitString / _bitsPerBitString);
+            return (GetRequiredDataBits() - 4 - BitsPerCharacterCountIndicator) * DataPerBitString / BitsPerBitString;
         }
 
         public EncoderBase(string unencodedString)
         {
-            _unencodedString = unencodedString;
-            _characterCountIndicator = new BitArray(BitConverter.GetBytes(_unencodedString.Length));
+            UnencodedString = unencodedString;
+            CharacterCountIndicator = new BitArray(BitConverter.GetBytes(UnencodedString.Length));
         }
 
-        public Byte[] DataEncode()
+        public byte[] DataEncode()
         {
             List<BitArray> bitArray;
             bitArray = Encode();
             Terminate(bitArray);
             MakeMultipleOf8(bitArray);
             Pad(bitArray);
-            _encodedBytes = ConvertListBitArrayToByteArray(bitArray);
+            EncodedBytes = ConvertListBitArrayToByteArray(bitArray);
             
-            return _encodedBytes;
+            return EncodedBytes;
         }
     }
 }

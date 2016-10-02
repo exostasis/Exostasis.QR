@@ -4,7 +4,22 @@ namespace Exostasis.QR.Image
 {
     public class FinderPattern : Element
     {
-        private const int _modulesWidth = 7;
-        private const int _modulesHeight = 7;
+        public static int ModulesWidth
+        {
+            get { return 7; }
+        }
+
+        public static int ModulesHeight
+        {
+            get { return 7; }
+        }
+
+        public FinderPattern(Cord topLeftCord)
+        {
+            TopLeftCord = topLeftCord;
+            TopRightCord = new Cord(topLeftCord.X + ModulesWidth, topLeftCord.Y);
+            BottomLeftCord = new Cord(topLeftCord.X, topLeftCord.Y + ModulesHeight);
+            BottomRightCord = new Cord(topLeftCord.X + ModulesWidth, topLeftCord.Y + ModulesHeight);
+        }
     }
 }

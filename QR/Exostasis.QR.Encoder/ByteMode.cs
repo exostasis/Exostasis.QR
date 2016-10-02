@@ -10,33 +10,33 @@ namespace Exostasis.QR.Encoder
     {
         public ByteMode (string unencodedString) : base (unencodedString)
         {
-            _modeIndicator = new BitArray(BitConverter.GetBytes(0x01));
-            _modeIndicator.Length = 4;
-            _dataPerBitString = 1;
-            _bitsPerBitString = 8;
-            _maximumPossibleCharacterCount = 2953;
+            ModeIndicator = new BitArray(BitConverter.GetBytes(0x01));
+            ModeIndicator.Length = 4;
+            DataPerBitString = 1;
+            BitsPerBitString = 8;
+            MaximumPossibleCharacterCount = 2953;
 
-            if (_unencodedString.Length > _maximumPossibleCharacterCount)
+            if (UnencodedString.Length > MaximumPossibleCharacterCount)
             {
                 throw new Exception("This string is unable to be converted into a qr code due to the length of it");
             }
 
-            base.DetermineMinimumVersionAndMaximumErrorCorrection();
-            _characterCountIndicator.Length = _bitsPerCharacterCountIndicator;
+            DetermineMinimumVersionAndMaximumErrorCorrection();
+            CharacterCountIndicator.Length = BitsPerCharacterCountIndicator;
         }
 
         protected override void DetermineBitsPerCharacterCountIndicator()
         {
-            switch (_version)
+            switch (Version)
             {
                 case 0:
-                    _bitsPerCharacterCountIndicator = 8;
+                    BitsPerCharacterCountIndicator = 8;
                     break;
                 case 9:
-                    _bitsPerCharacterCountIndicator = 16;
+                    BitsPerCharacterCountIndicator = 16;
                     break;
                 case 26:
-                    _bitsPerCharacterCountIndicator = 16;
+                    BitsPerCharacterCountIndicator = 16;
                     break;
             }
         }
@@ -45,12 +45,12 @@ namespace Exostasis.QR.Encoder
         {
             List<BitArray> bitArrays = new List<BitArray>();
 
-            bitArrays.Add(_modeIndicator);
-            bitArrays.Add(new BitArray(_characterCountIndicator));
+            bitArrays.Add(ModeIndicator);
+            bitArrays.Add(new BitArray(CharacterCountIndicator));
 
-            for (int i = 0; i < _unencodedString.Length; ++i)
+            for (int i = 0; i < UnencodedString.Length; ++i)
             {
-                var temp = Encoding.GetEncoding("ISO-8859-1").GetBytes(_unencodedString.ToCharArray(), i, 1);
+                var temp = Encoding.GetEncoding("ISO-8859-1").GetBytes(UnencodedString.ToCharArray(), i, 1);
                 bitArrays.Add(new BitArray(temp));
                 bitArrays.Last().Length = 8;
             }

@@ -2,7 +2,6 @@
 using Exostasis.QR.Common.Enum;
 using Exostasis.QR.Common.Extensions;
 using Exostasis.QR.ErrorCorrection;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,118 +10,118 @@ namespace Exostasis.QR.Structurer
 {
     public class StructureGenerator
     {
-        private int _version { get; set; }
-        private int _blocksInGroup1 { get; set; }
-        private int _blocksInGroup2 { get; set; }
-        private int _codeWordsPerBlockGroup1 { get; set; }
-        private int _codeWordsPerBlockGroup2 { get; set; }
-        private int _requiredRemainder { get; set; }
-        private int _requiredECwords { get; set; }
+        private int Version { get; set; }
+        private int BlocksInGroup1 { get; set; }
+        private int BlocksInGroup2 { get; set; }
+        private int CodeWordsPerBlockGroup1 { get; set; }
+        private int CodeWordsPerBlockGroup2 { get; set; }
+        private int RequiredRemainder { get; set; }
+        private int RequiredECwords { get; set; }
 
-        private Byte[] _encodedArray { get; set; }
+        private byte[] EncodedArray { get; set; }
 
-        private ErrorCorrectionLevel _errorCorrectionLevel { get; set; }
+        private ErrorCorrectionLevel ErrorCorrectionLevel { get; set; }
 
-        private List<BitArray> _intelevedBlockArray { get; set; }
+        private List<BitArray> IntelevedBlockArray { get; set; }
 
-        private List<Group> _groups { get; set; }
+        private List<Group> Groups { get; set; }
 
-        private ErrorCorrectionGenerator _qRErrorGenerator { get; set; }
+        private ErrorCorrectionGenerator QrErrorGenerator { get; set; }
 
-        public StructureGenerator(Byte[] encodedArray, int version, ErrorCorrectionLevel errorCorrectionLevel)
+        public StructureGenerator(byte[] encodedArray, int version, ErrorCorrectionLevel errorCorrectionLevel)
         {
-            _version = version;
-            _errorCorrectionLevel = errorCorrectionLevel;
-            _blocksInGroup1 = Constants._requiredBlocksInGroup1[_version, (int)_errorCorrectionLevel];
-            _blocksInGroup2 = Constants._requiredBlocksInGroup2[_version, (int)_errorCorrectionLevel];
-            _codeWordsPerBlockGroup1 = Constants._requiredCodeWordsInBlocksGroup1[_version, (int)_errorCorrectionLevel];
-            _codeWordsPerBlockGroup2 = Constants._requiredCodeWordsInBlocksGroup2[_version, (int)_errorCorrectionLevel];
-            _requiredRemainder = Constants._remainderBitsRequired[_version];
-            _requiredECwords = Constants._requiredErrorCorrectionCodesPerBlock[_version, (int)_errorCorrectionLevel];
-            _encodedArray = encodedArray;
-            _groups = new List<Group>();
+            Version = version;
+            ErrorCorrectionLevel = errorCorrectionLevel;
+            BlocksInGroup1 = Constants.RequiredBlocksInGroup1[Version, (int)ErrorCorrectionLevel];
+            BlocksInGroup2 = Constants.RequiredBlocksInGroup2[Version, (int)ErrorCorrectionLevel];
+            CodeWordsPerBlockGroup1 = Constants.RequiredCodeWordsInBlocksGroup1[Version, (int)ErrorCorrectionLevel];
+            CodeWordsPerBlockGroup2 = Constants.RequiredCodeWordsInBlocksGroup2[Version, (int)ErrorCorrectionLevel];
+            RequiredRemainder = Constants.RemainderBitsRequired[Version];
+            RequiredECwords = Constants.RequiredErrorCorrectionCodesPerBlock[Version, (int)ErrorCorrectionLevel];
+            EncodedArray = encodedArray;
+            Groups = new List<Group>();
         }
 
         public List<BitArray> Generate ()
         {
-            _intelevedBlockArray = new List<BitArray>();
+            IntelevedBlockArray = new List<BitArray>();
             BuildGroups();
             Interleve();
             AddRemainders();
 
-            return _intelevedBlockArray;
+            return IntelevedBlockArray;
         }
 
         private void BuildGroups ()
         {
             int spotInEncodedArray = 0;
 
-            _groups.Add(new Group());
+            Groups.Add(new Group());
 
-            for (int i = 0; i < _blocksInGroup1; ++i)
+            for (int i = 0; i < BlocksInGroup1; ++i)
             {
-                BuildBlock(_encodedArray.SubArray(spotInEncodedArray, _codeWordsPerBlockGroup1));
-                spotInEncodedArray += _codeWordsPerBlockGroup1;
+                BuildBlock(EncodedArray.SubArray(spotInEncodedArray, CodeWordsPerBlockGroup1));
+                spotInEncodedArray += CodeWordsPerBlockGroup1;
             }
 
-            if (_blocksInGroup2 != 0)
+            if (BlocksInGroup2 != 0)
             {
-                _groups.Add(new Group());
-                for (int i = 0; i < _blocksInGroup2; ++i)
+                Groups.Add(new Group());
+                for (int i = 0; i < BlocksInGroup2; ++i)
                 {
-                    BuildBlock(_encodedArray.SubArray(spotInEncodedArray, _codeWordsPerBlockGroup2));
-                    spotInEncodedArray += _codeWordsPerBlockGroup2;
+                    BuildBlock(EncodedArray.SubArray(spotInEncodedArray, CodeWordsPerBlockGroup2));
+                    spotInEncodedArray += CodeWordsPerBlockGroup2;
                 }
             }
         }
 
-        private void BuildBlock (Byte[] codeWords)
+        private void BuildBlock (byte[] codeWords)
         {
-            Byte[] errorCorrectionArray;
+            byte[] errorCorrectionArray;
 
-            _qRErrorGenerator = new ErrorCorrectionGenerator(codeWords, _requiredECwords);
-            errorCorrectionArray = _qRErrorGenerator.GenerateErrorCorrectionArray();
-            _groups.Last().AddBlock(new Block(codeWords, errorCorrectionArray));
+            QrErrorGenerator = new ErrorCorrectionGenerator(codeWords, RequiredECwords);
+            errorCorrectionArray = QrErrorGenerator.GenerateErrorCorrectionArray();
+            Groups.Last().AddBlock(new Block(codeWords, errorCorrectionArray));
         }
 
         private void Interleve ()
         {
-            List<Byte> tempBytes = new List<Byte>();
-            int maxCodeWords = _codeWordsPerBlockGroup1 > _codeWordsPerBlockGroup2 ? _codeWordsPerBlockGroup1 : _codeWordsPerBlockGroup2;
+            List<byte> tempBytes = new List<byte>();
+            int maxCodeWords = CodeWordsPerBlockGroup1 > CodeWordsPerBlockGroup2 ? CodeWordsPerBlockGroup1 : CodeWordsPerBlockGroup2;
             
-            for (int i = 0; i < (maxCodeWords); ++i)
+            for (int i = 0; i < maxCodeWords; ++i)
             {
-                for (int j = 0; j < _groups.Count; ++j)
+                for (int j = 0; j < Groups.Count; ++j)
                 {
-                    for (int k = 0; k < _groups.ElementAt(j)._blocks.Count; ++k)
+                    for (int k = 0; k < Groups.ElementAt(j).Blocks.Count; ++k)
                     {
-                        if (i < _groups.ElementAt(j)._blocks.ElementAt(k)._codeWords.Count)
+                        if (i < Groups.ElementAt(j).Blocks.ElementAt(k).CodeWords.Count)
                         {
-                            tempBytes.Insert(0, _groups.ElementAt(j)._blocks.ElementAt(k)._codeWords.ElementAt(i));
+                            tempBytes.Insert(0, Groups.ElementAt(j).Blocks.ElementAt(k).CodeWords.ElementAt(i));
                         }
                     }
                 }
-                _intelevedBlockArray.Add(new BitArray(tempBytes.ToArray()));
+                IntelevedBlockArray.Add(new BitArray(tempBytes.ToArray()));
                 tempBytes.Clear();
             }
 
-            for (int i = 0; i < _requiredECwords; ++i)
+            for (int i = 0; i < RequiredECwords; ++i)
             {
-                for (int j = 0; j < _groups.Count; ++j)
+                for (int j = 0; j < Groups.Count; ++j)
                 {
-                    for (int k = 0; k < _groups.ElementAt(j)._blocks.Count; ++k)
+                    for (int k = 0; k < Groups.ElementAt(j).Blocks.Count; ++k)
                     {
-                        tempBytes.Insert(0, _groups.ElementAt(j)._blocks.ElementAt(k)._ecWords.ElementAt(i));
+                        tempBytes.Insert(0, Groups.ElementAt(j).Blocks.ElementAt(k).EcWords.ElementAt(i));
                     }
                 }
-                _intelevedBlockArray.Add(new BitArray(tempBytes.ToArray()));
+                IntelevedBlockArray.Add(new BitArray(tempBytes.ToArray()));
                 tempBytes.Clear();
             }
         }
 
         private void AddRemainders ()
         {
-            _intelevedBlockArray.Add(new BitArray(_requiredRemainder));
+            IntelevedBlockArray.Add(new BitArray(RequiredRemainder));
         }
     }
 }

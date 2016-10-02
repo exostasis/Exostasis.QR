@@ -8,9 +8,9 @@ namespace Exostasis.QR.Terminal
         static void Main(string[] args)
         {
             Console.WriteLine("Enter a string to encode");
-            QRCode MyQRCode = new QRCode(Console.ReadLine());
+            QrCode myQrCode = new QrCode(Console.ReadLine());
 
-            MyQRCode.Generate();
+            myQrCode.Generate();
 
             Console.ReadLine();
         }

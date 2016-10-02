@@ -2,11 +2,11 @@
 {
     public class AlignmentCordArray
     {
-        private int[] _cords { get; set; }
+        public int[] Values { get; private set; }
 
-        public AlignmentCordArray(params int[] cords)
+        public AlignmentCordArray(params int[] values)
         {
-            _cords = cords;
+            Values = values;
         }
     }
 }

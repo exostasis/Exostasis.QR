@@ -41,7 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="QRCode.cs" />
+    <Compile Include="QrCode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -56,6 +56,10 @@
     <ProjectReference Include="..\Exostasis.QR.ErrorCorrection\Exostasis.QR.ErrorCorrection.csproj">
       <Project>{10F14906-D6D2-4F29-AE15-F59FAF4EEE17}</Project>
       <Name>Exostasis.QR.ErrorCorrection</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Exostasis.QR.Image\Exostasis.QR.Image.csproj">
+      <Project>{BF294614-9FC0-4C22-BBC5-62FD4521F49B}</Project>
+      <Name>Exostasis.QR.Image</Name>
     </ProjectReference>
     <ProjectReference Include="..\Exostasis.QR.Structurer\Exostasis.QR.Structurer.csproj">
       <Project>{7D3F1A6B-91ED-41DA-BE45-4F8C362F728D}</Project>

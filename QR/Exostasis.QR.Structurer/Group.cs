@@ -4,15 +4,15 @@ namespace Exostasis.QR.Structurer
 {
     public class Group
     {
-        public List<Block> _blocks { get; private set; }
+        public List<Block> Blocks { get; private set; }
         public Group ()
         {
-            _blocks = new List<Block>();
+            Blocks = new List<Block>();
         }
 
         public void AddBlock (Block block)
         {
-            _blocks.Add(block);
+            Blocks.Add(block);
         }
     }
 }

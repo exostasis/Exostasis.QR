@@ -1,5 +1,6 @@
 ﻿using Exostasis.QR.Common.Enum;
 using Exostasis.QR.Encoder;
+using Exostasis.QR.Image;
 using Exostasis.QR.Structurer;
 using System;
 using System.Collections;
@@ -9,70 +10,73 @@ using System.Text.RegularExpressions;
 
 namespace Exostasis.QR.Generator
 {
-    public class QRCode
+    public class QrCode
     {
         private const string NumericModeRegex = "^[0-9]+$";
         private const string AlphanumericModeRegex = "^[0-9a-z$%*+-./:]+$";
 
-        private int _version { get; set; }
+        private int Version { get; set; }
 
-        private ErrorCorrectionLevel _errorCorrectionLevel { get; set; }
+        private ErrorCorrectionLevel ErrorCorrectionLevel { get; set; }
 
-        private string _unencodedString { get; set; }
+        private string UnencodedString { get; set; }
 
-        private Byte[] _encodedArray { get; set; }
-        private Byte[] _errorCorrectionArray { get; set; }
+        private byte[] EncodedArray { get; set; }
 
-        private EncoderBase _qREncoder { get; set; }
-        private StructureGenerator _qRStructurer { get; set; }               
+        private EncoderBase QrEncoder { get; set; }
+        private StructureGenerator QrStructurer { get; set; }
 
-        private List<BitArray> _structuredArray { get; set; }
+        private List<BitArray> StructuredArray { get; set; }
 
-        public QRCode(string UnencodedString)
+        private QrImage QrImage { get; set; }
+
+        public QrCode(string unencodedString)
         {
-            _unencodedString = UnencodedString;
+            UnencodedString = unencodedString;
         }
 
-        public void Generate ()
+        public void Generate()
         {
-            _qREncoder = DataAnalyse();
-            _encodedArray = _qREncoder.DataEncode();
-            _version = _qREncoder._version;
-            _errorCorrectionLevel = _qREncoder._errorCorrectionLevel;
-            _qRStructurer = new StructureGenerator(_encodedArray, _version, _errorCorrectionLevel);
-            _structuredArray = _qRStructurer.Generate();
+            QrEncoder = DataAnalyse();
+            EncodedArray = QrEncoder.DataEncode();
+            Version = QrEncoder.Version;
+            ErrorCorrectionLevel = QrEncoder.ErrorCorrectionLevel;
+            QrStructurer = new StructureGenerator(EncodedArray, Version, ErrorCorrectionLevel);
+            StructuredArray = QrStructurer.Generate();
+            QrImage = new QrImage(Version, 1);
+            QrImage.WriteImage("c:\\test.bmp");
         }
 
-        private EncoderBase DataAnalyse ()
+        private EncoderBase DataAnalyse()
         {
-            EncoderBase TheEncoder;
-        
-            if (Regex.IsMatch(_unencodedString, NumericModeRegex))
+            EncoderBase theEncoder;
+
+            if (Regex.IsMatch(UnencodedString, NumericModeRegex))
             {
-                TheEncoder = new NumericMode(_unencodedString);
+                theEncoder = new NumericMode(UnencodedString);
             }
-            else if (Regex.IsMatch(_unencodedString, AlphanumericModeRegex))
+            else if (Regex.IsMatch(UnencodedString, AlphanumericModeRegex))
             {
-                TheEncoder = new AlphanumericMode(_unencodedString);
+                theEncoder = new AlphanumericMode(UnencodedString);
             }
-            else if (IsISO8859(_unencodedString))
+            else if (IsIso8859(UnencodedString))
             {
-                TheEncoder = new ByteMode(_unencodedString);
+                theEncoder = new ByteMode(UnencodedString);
             }
             else
             {
                 throw new Exception("Unsuporrted string for QR encoding");
             }
 
-            return TheEncoder;
+            return theEncoder;
         }
 
-        private bool IsISO8859(string InputString)
+        private bool IsIso8859(string inputString)
         {
-            byte[] ISOBytes = Encoding.GetEncoding("ISO-8859-1").GetBytes(InputString);
-            string ISOString = Encoding.GetEncoding("ISO-8859-1").GetString(ISOBytes);
+            byte[] isoBytes = Encoding.GetEncoding("ISO-8859-1").GetBytes(inputString);
+            string isoString = Encoding.GetEncoding("ISO-8859-1").GetString(isoBytes);
 
-            return InputString.Equals(ISOString);
+            return inputString.Equals(isoString);
         }
     }
 }
