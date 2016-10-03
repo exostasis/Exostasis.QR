@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using Exostasis.QR.Common.Image;
 using System.Drawing;
 using System.Linq;
@@ -69,7 +70,7 @@ namespace Exostasis.QR.Image
 
         private void AddTimingPatterns()
         {
-
+            Cord topTimingPatterTopLeftCord = new Cord(TopLeftFinderPattern.BottomRightCord.X + 2, TopLeftFinderPattern.BottomRightCord.Y);           
         }
 
         private int GetModuleSize()
@@ -107,6 +108,11 @@ namespace Exostasis.QR.Image
 
                 qrBitmap.Save(filename);
             }
+        }
+
+        public void WriteBitArray(List<BitArray> structuredArray)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

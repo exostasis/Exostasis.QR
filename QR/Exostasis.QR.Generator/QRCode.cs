@@ -44,6 +44,7 @@ namespace Exostasis.QR.Generator
             QrStructurer = new StructureGenerator(EncodedArray, Version, ErrorCorrectionLevel);
             StructuredArray = QrStructurer.Generate();
             QrImage = new QrImage(Version, scale);
+            QrImage.WriteBitArray(StructuredArray);
             QrImage.WriteImage("c:\\test.bmp");
         }
 
