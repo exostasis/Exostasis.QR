@@ -69,8 +69,34 @@ namespace Exostasis.QR.Image
         }
 
         private void AddTimingPatterns()
-        {
-            Cord topTimingPatterTopLeftCord = new Cord(TopLeftFinderPattern.BottomRightCord.X + 2, TopLeftFinderPattern.BottomRightCord.Y);           
+        {            
+            for (int x = TopLeftFinderPattern.BottomRightCord.X + 2; x < TopRightFinderPattern.BottomLeftCord.X - 1; ++x)
+            {
+                if (x % 2 == 1)
+                {
+                    Elements.Add(new Module(new Cord(TopLeftFinderPattern.BottomRightCord.X + x, TopRightFinderPattern.BottomRightCord.Y),
+                        Color.Black));
+                }
+                else
+                {
+                    Elements.Add(new Module(new Cord(TopLeftFinderPattern.BottomRightCord.X + x, TopRightFinderPattern.BottomRightCord.Y),
+                        Color.White));
+                }
+            }
+
+            for (int y = TopLeftFinderPattern.BottomRightCord.Y + 2; y < BottomLeftFinderPattern.TopRightCord.Y - 1; ++y)
+            {
+                if (y % 2 == 1)
+                {
+                    Elements.Add(new Module(new Cord(TopLeftFinderPattern.BottomRightCord.X, TopRightFinderPattern.BottomRightCord.Y + y),
+                        Color.Black));
+                }
+                else
+                {
+                    Elements.Add(new Module(new Cord(TopLeftFinderPattern.BottomRightCord.X, TopRightFinderPattern.BottomRightCord.Y + y),
+                        Color.White));
+                }
+            }
         }
 
         private int GetModuleSize()
