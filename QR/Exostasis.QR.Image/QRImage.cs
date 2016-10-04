@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Exostasis.QR.Common.Image;
 using System.Drawing;
+using System.IO.Ports;
 using System.Linq;
 using Exostasis.QR.Common;
 
@@ -11,92 +12,92 @@ namespace Exostasis.QR.Image
     {
         private int Version { get; }
         private int Scale { get; }
-        private List<Element> Elements { get; }
+        private Module[,] _elements;
 
         private FinderPattern TopLeftFinderPattern { get; set; }
         private FinderPattern TopRightFinderPattern { get; set; }
         private FinderPattern BottomLeftFinderPattern { get; set; }
 
+        private TimingPattern LeftTimingPattern { get; set; }
+        private TimingPattern TopTimingPattern { get; set; }
+
+        private List<Seperator> Seperators { get; set; }
+
         public QrImage(int version, int scale)
         {
             Version = version;
             Scale = scale;
-            Elements = new List<Element>();
+            _elements = new Module[GetModuleSize(), GetModuleSize()];            
             AddFinderPatterns();
             AddSeperators();
             AddAlignmentPatterns();
             AddTimingPatterns();
-        }
+            AddDarkModule();
+        }        
 
         private void AddAlignmentPatterns()
         {
             List<Cord> possibleCords = CalculateAlignmentPatternCords();
-            List<AlignmentPattern> possibAlignmentPatterns = new List<AlignmentPattern>();
+                       
+            possibleCords.ForEach(cord =>
+            {
+                for (int y = 0; y < AlignmentPattern.ModulesHeigh; ++y)
+                {
+                    for (int x = 0; x < AlignmentPattern.ModulesWide; ++x)
+                    {
+                        if (_elements[cord.X - AlignmentPattern.ModulesWide / 2 + x, cord.Y - AlignmentPattern.ModulesHeigh / 2 + y] 
+                            != null)
+                        {
+                            return;
+                        }
+                    }
+                }
 
-            possibleCords.ForEach(cord => possibAlignmentPatterns.Add(new AlignmentPattern(cord)));
+                new AlignmentPattern(cord, ref _elements);
+            });          
+        }
 
-            possibAlignmentPatterns.Where(alignmentPattern => Elements.Any(alignmentPattern.IsWithinSpace));
-
-            possibAlignmentPatterns.ForEach(alignmentPattern => Elements.Add(alignmentPattern));
+        private void AddDarkModule()
+        {
+            new Module(new Cord(BottomLeftFinderPattern.TopRightCord.X + 1, BottomLeftFinderPattern.TopRightCord.Y), 
+                Color.Black, ref _elements);
         }
 
         private void AddFinderPatterns()
         {
-            TopLeftFinderPattern = new FinderPattern(new Cord(0, 0));
-            TopRightFinderPattern = new FinderPattern(new Cord(GetModuleSize() - FinderPattern.ModulesWidth, 0));
-            BottomLeftFinderPattern = new FinderPattern(new Cord(0, GetModuleSize() - FinderPattern.ModulesHeight));
-            Elements.Add(TopLeftFinderPattern);
-            Elements.Add(TopRightFinderPattern);
-            Elements.Add(BottomLeftFinderPattern);
+            TopLeftFinderPattern = new FinderPattern(new Cord(0, 0), ref _elements);
+            TopRightFinderPattern = new FinderPattern(new Cord(GetModuleSize() - FinderPattern.ModulesWide, 0), ref _elements);
+            BottomLeftFinderPattern = new FinderPattern(new Cord(0, GetModuleSize() - FinderPattern.ModulesHeigh), ref _elements);
         }
 
         private void AddSeperators()
         {
-            Elements.Add(new Seperator(new Cord(TopLeftFinderPattern.TopRightCord.X + 1, TopLeftFinderPattern.TopRightCord.Y), 1,
-                FinderPattern.ModulesHeight + 1));
-            Elements.Add(new Seperator(new Cord(TopLeftFinderPattern.BottomLeftCord.X, TopLeftFinderPattern.BottomLeftCord.Y + 1),
-                FinderPattern.ModulesWidth, 1));
+            Seperators = new List<Seperator>();
+            Seperators.Add(new Seperator(new Cord(TopLeftFinderPattern.TopRightCord.X, TopLeftFinderPattern.TopRightCord.Y), 1,
+                FinderPattern.ModulesHeigh + 1, ref _elements));
+            Seperators.Add(new Seperator(new Cord(TopLeftFinderPattern.BottomLeftCord.X, TopLeftFinderPattern.BottomLeftCord.Y),
+                FinderPattern.ModulesWide, 1, ref _elements));
 
-            Elements.Add(new Seperator(new Cord(TopRightFinderPattern.TopLeftCord.X - 1, TopRightFinderPattern.TopLeftCord.Y), 1,
-                FinderPattern.ModulesHeight + 1));
-            Elements.Add(new Seperator(new Cord(TopRightFinderPattern.BottomLeftCord.X, TopRightFinderPattern.BottomLeftCord.Y + 1),
-                FinderPattern.ModulesWidth, 1));
+            Seperators.Add(new Seperator(new Cord(TopRightFinderPattern.TopLeftCord.X - 1, TopRightFinderPattern.TopLeftCord.Y), 1,
+                FinderPattern.ModulesHeigh + 1, ref _elements));
+            Seperators.Add(new Seperator(new Cord(TopRightFinderPattern.BottomLeftCord.X, TopRightFinderPattern.BottomLeftCord.Y),
+                FinderPattern.ModulesWide, 1, ref _elements));
 
-            Elements.Add(new Seperator(new Cord(BottomLeftFinderPattern.TopLeftCord.X, BottomLeftFinderPattern.TopLeftCord.Y - 1),
-                FinderPattern.ModulesWidth, 1));
-            Elements.Add(new Seperator(new Cord(BottomLeftFinderPattern.TopRightCord.X + 1, BottomLeftFinderPattern.TopRightCord.Y - 1), 1,
-                FinderPattern.ModulesHeight + 1));
+            Seperators.Add(new Seperator(new Cord(BottomLeftFinderPattern.TopLeftCord.X, BottomLeftFinderPattern.TopLeftCord.Y - 1) ,
+                FinderPattern.ModulesWide, 1, ref _elements));
+            Seperators.Add(new Seperator(new Cord(BottomLeftFinderPattern.TopRightCord.X, BottomLeftFinderPattern.TopRightCord.Y - 1), 1,
+                FinderPattern.ModulesHeigh + 1, ref _elements));
         }
 
         private void AddTimingPatterns()
         {            
-            for (int x = TopLeftFinderPattern.BottomRightCord.X + 2; x < TopRightFinderPattern.BottomLeftCord.X - 1; ++x)
-            {
-                if (x % 2 == 1)
-                {
-                    Elements.Add(new Module(new Cord(TopLeftFinderPattern.BottomRightCord.X + x, TopRightFinderPattern.BottomRightCord.Y),
-                        Color.Black));
-                }
-                else
-                {
-                    Elements.Add(new Module(new Cord(TopLeftFinderPattern.BottomRightCord.X + x, TopRightFinderPattern.BottomRightCord.Y),
-                        Color.White));
-                }
-            }
+            TopTimingPattern = 
+                new TimingPattern(new Cord(TopLeftFinderPattern.BottomRightCord.X + 1, TopLeftFinderPattern.BottomRightCord.Y - 1), 
+                TopRightFinderPattern.BottomLeftCord.X - TopLeftFinderPattern.BottomRightCord.X, 1, ref _elements);
 
-            for (int y = TopLeftFinderPattern.BottomRightCord.Y + 2; y < BottomLeftFinderPattern.TopRightCord.Y - 1; ++y)
-            {
-                if (y % 2 == 1)
-                {
-                    Elements.Add(new Module(new Cord(TopLeftFinderPattern.BottomRightCord.X, TopRightFinderPattern.BottomRightCord.Y + y),
-                        Color.Black));
-                }
-                else
-                {
-                    Elements.Add(new Module(new Cord(TopLeftFinderPattern.BottomRightCord.X, TopRightFinderPattern.BottomRightCord.Y + y),
-                        Color.White));
-                }
-            }
+            LeftTimingPattern = 
+                new TimingPattern(new Cord(TopLeftFinderPattern.BottomRightCord.X - 1, TopLeftFinderPattern.BottomRightCord.Y + 1),
+                1, BottomLeftFinderPattern.TopRightCord.Y - 1 - TopLeftFinderPattern.BottomRightCord.Y - 1, ref _elements);
         }
 
         private int GetModuleSize()
@@ -131,14 +132,96 @@ namespace Exostasis.QR.Image
         {
             using (var qrBitmap = new Bitmap(GetModuleSize() * Scale, GetModuleSize() * Scale))
             {
-
+                for (int y = 0; y < GetModuleSize(); ++y)
+                {
+                    for (int x = 0; x < GetModuleSize(); ++x)
+                    {
+                        if (_elements[x, y] != null)
+                        {
+                            for (int i = 0; i < Scale; ++i)
+                            {
+                                for (int j = 0; j < Scale; ++j)
+                                {
+                                    qrBitmap.SetPixel(x * Scale + i, y * Scale + j, _elements[x, y].PixelColor);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            for (int i = 0; i < Scale; ++i)
+                            {
+                                for (int j = 0; j < Scale; ++j)
+                                {
+                                    qrBitmap.SetPixel(x * Scale + i, y * Scale + j, Color.Green);
+                                }
+                            }
+                        }
+                    }
+                }
                 qrBitmap.Save(filename);
             }
         }
 
         public void WriteBitArray(List<BitArray> structuredArray)
         {
-            throw new System.NotImplementedException();
+            int x = GetModuleSize() - 1;
+            int y = GetModuleSize() - 1;
+            int listElement = 0;
+            int listIndex = 0;
+
+            while (listIndex < structuredArray.Count)
+            {
+                if (x >= TopRightFinderPattern.BottomLeftCord.X - 1 && x < TopRightFinderPattern.BottomRightCord.X && 
+                    y == TopRightFinderPattern.BottomLeftCord.Y + 1)
+                {
+                    // reserved for format information              
+                }
+                else if (x >= TopLeftFinderPattern.BottomLeftCord.X && x <= TopLeftFinderPattern.BottomLeftCord.X + 1 && 
+                    y == TopLeftFinderPattern.BottomLeftCord.Y + 1)
+                {
+                    // reserved for format information
+                }
+                else if (x == TopLeftFinderPattern.TopRightCord.X + 1 && y >= TopLeftFinderPattern.TopRightCord.Y && 
+                    y <= TopLeftFinderPattern.BottomRightCord.Y + 1)
+                {
+                    // reserved for format information
+                }
+                else if (x == BottomLeftFinderPattern.TopRightCord.X + 1 && y >= BottomLeftFinderPattern.TopRightCord.Y &&
+                    y < BottomLeftFinderPattern.BottomRightCord.Y)
+                {
+                    // reserved for format information
+                }
+                else if (Version >= 6 && x >= TopRightFinderPattern.TopLeftCord.X - 4 && x < TopRightFinderPattern.TopLeftCord.X - 1 &&
+                    y >= TopRightFinderPattern.TopLeftCord.Y && y < TopRightFinderPattern.BottomLeftCord.Y)
+                {
+                    // reserved for version information
+                }
+                else if (Version >= 6 && x >= BottomLeftFinderPattern.TopLeftCord.X && x < BottomLeftFinderPattern.TopRightCord.X - 1 &&
+                    y >= BottomLeftFinderPattern.TopLeftCord.Y - 4 && y < TopRightFinderPattern.BottomLeftCord.Y - 1)
+                {
+                    // reserved for version information
+                }
+                else if (_elements[x, y] == null)
+                {
+                    new Module(new Cord(x, y), structuredArray.ElementAt(listIndex)[listElement] ? Color.Black : Color.White, ref _elements);
+                }
+
+                if (x + 1 == LeftTimingPattern.TopLeftCord.X)
+                {
+                }
+                else if (y == 0)
+                {
+                    
+                }
+                else if (y == GetModuleSize() - 1)
+                {
+                    
+                }
+                else if (x % 2 == 0)
+                {
+                    
+                }
+            }
         }
     }
 }

@@ -35,7 +35,7 @@ namespace Exostasis.QR.Generator
             UnencodedString = unencodedString;
         }
 
-        public void Generate(int scale = 1)
+        public void Generate(int scale = 12)
         {
             QrEncoder = DataAnalyse();
             EncodedArray = QrEncoder.DataEncode();
@@ -43,9 +43,9 @@ namespace Exostasis.QR.Generator
             ErrorCorrectionLevel = QrEncoder.ErrorCorrectionLevel;
             QrStructurer = new StructureGenerator(EncodedArray, Version, ErrorCorrectionLevel);
             StructuredArray = QrStructurer.Generate();
-            QrImage = new QrImage(Version, scale);
+            QrImage = new QrImage(Version, 12);
             QrImage.WriteBitArray(StructuredArray);
-            QrImage.WriteImage("c:\\test.bmp");
+            QrImage.WriteImage(@"C:\Users\exo\Desktop\test.bmp");
         }
 
         private EncoderBase DataAnalyse()
