@@ -1,6 +1,4 @@
-﻿using Exostasis.QR.Common.Image;
-
-namespace Exostasis.QR.Image
+﻿namespace Exostasis.QR.Common.Image
 {
     public abstract class Element
     {
@@ -31,6 +29,11 @@ namespace Exostasis.QR.Image
 
             return other.BottomRightCord.X <= TopRightCord.X && other.BottomRightCord.X >= TopLeftCord.X &&
                    other.BottomRightCord.Y <= BottomLeftCord.Y && other.BottomRightCord.Y >= TopLeftCord.Y;
+        }
+
+        public bool IsWithinSpace(int x, int y)
+        {
+            return x <= TopRightCord.X && x >= TopLeftCord.X && y <= BottomLeftCord.Y && y >= TopLeftCord.Y;
         }
     }
 }

@@ -1,11 +1,11 @@
-﻿using Exostasis.QR.Common;
-using Exostasis.QR.Common.Enum;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Exostasis.QR.Common;
+using Exostasis.QR.Common.Enum;
 
-namespace Exostasis.QR.Encoder
+namespace QREncoder
 {
     public abstract class EncoderBase
     {

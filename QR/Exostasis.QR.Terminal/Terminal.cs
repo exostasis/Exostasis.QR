@@ -1,7 +1,7 @@
-﻿using Exostasis.QR.Generator;
-using System;
+﻿using System;
+using Exostasis.QR.Generator;
 
-namespace Exostasis.QR.Terminal
+namespace QRConsole
 {
     class Terminal
     {

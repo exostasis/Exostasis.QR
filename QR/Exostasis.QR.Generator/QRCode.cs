@@ -1,5 +1,4 @@
 ﻿using Exostasis.QR.Common.Enum;
-using Exostasis.QR.Encoder;
 using Exostasis.QR.Image;
 using Exostasis.QR.Structurer;
 using System;
@@ -7,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
+using QREncoder;
 
 namespace Exostasis.QR.Generator
 {
@@ -43,8 +43,7 @@ namespace Exostasis.QR.Generator
             ErrorCorrectionLevel = QrEncoder.ErrorCorrectionLevel;
             QrStructurer = new StructureGenerator(EncodedArray, Version, ErrorCorrectionLevel);
             StructuredArray = QrStructurer.Generate();
-            QrImage = new QrImage(Version, 12);
-            QrImage.WriteBitArray(StructuredArray);
+            QrImage = new QrImage(Version, 12, StructuredArray);
             QrImage.WriteImage(@"C:\Users\exo\Desktop\test.bmp");
         }
 

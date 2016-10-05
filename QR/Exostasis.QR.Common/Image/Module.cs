@@ -1,8 +1,6 @@
-﻿using System.Data;
-using System.Drawing;
-using Exostasis.QR.Common.Image;
+﻿using System.Drawing;
 
-namespace Exostasis.QR.Image
+namespace Exostasis.QR.Common.Image
 {
     public class Module : Element
     {
@@ -22,6 +20,11 @@ namespace Exostasis.QR.Image
         private void WriteModule(ref Module[,] elements)
         {
             elements[TopLeftCord.X, TopLeftCord.Y] = this;
+        }
+
+        public void InvertPixelColor()
+        {
+            PixelColor = PixelColor == Color.Black? Color.White: Color.Black;
         }
     }
 }

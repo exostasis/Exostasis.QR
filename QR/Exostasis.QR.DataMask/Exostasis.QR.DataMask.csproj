@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{582628B9-CD10-4F1D-8C2D-38F5B9433EF5}</ProjectGuid>
+    <ProjectGuid>{3B24E6D3-B18A-4A6C-BD01-222B1375683C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Exostasis.QR.Common</RootNamespace>
-    <AssemblyName>Exostasis.QR.Common</AssemblyName>
+    <RootNamespace>Exostasis.QR.DataMask</RootNamespace>
+    <AssemblyName>Exostasis.QR.DataMask</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -16,7 +16,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -24,7 +24,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\</OutputPath>
+    <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -41,14 +41,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Constants.cs" />
-    <Compile Include="Image\AligmentCordArray.cs" />
-    <Compile Include="Image\Cord.cs" />
-    <Compile Include="Enum\ErrorCorretionLevel.cs" />
-    <Compile Include="Extensions\ArrayExtension.cs" />
-    <Compile Include="Image\Element.cs" />
-    <Compile Include="Image\Module.cs" />
+    <Compile Include="DataMasker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Exostasis.QR.Common\Exostasis.QR.Common.csproj">
+      <Project>{582628b9-cd10-4f1d-8c2d-38f5b9433ef5}</Project>
+      <Name>Exostasis.QR.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

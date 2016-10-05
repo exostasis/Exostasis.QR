@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Drawing;
+﻿using System.Drawing;
 using Exostasis.QR.Common.Image;
 
 namespace Exostasis.QR.Image
