@@ -77,10 +77,8 @@ namespace Exostasis.QR.Structurer
 
         private void BuildBlock (byte[] codeWords)
         {
-            byte[] errorCorrectionArray;
-
             QrErrorGenerator = new ErrorCorrectionGenerator(codeWords, RequiredECwords);
-            errorCorrectionArray = QrErrorGenerator.GenerateErrorCorrectionArray();
+            var errorCorrectionArray = QrErrorGenerator.GenerateErrorCorrectionArray();
             Groups.Last().AddBlock(new Block(codeWords, errorCorrectionArray));
         }
 
@@ -98,11 +96,11 @@ namespace Exostasis.QR.Structurer
                         if (i < Groups.ElementAt(j).Blocks.ElementAt(k).CodeWords.Count)
                         {
                             tempBytes.Insert(0, Groups.ElementAt(j).Blocks.ElementAt(k).CodeWords.ElementAt(i));
+                            IntelevedBlockArray.Add(new BitArray(tempBytes.ToArray()));
+                            tempBytes.Clear();
                         }
                     }
-                }
-                IntelevedBlockArray.Add(new BitArray(tempBytes.ToArray()));
-                tempBytes.Clear();
+                }               
             }
 
             for (int i = 0; i < RequiredECwords; ++i)
@@ -112,16 +110,19 @@ namespace Exostasis.QR.Structurer
                     for (int k = 0; k < Groups.ElementAt(j).Blocks.Count; ++k)
                     {
                         tempBytes.Insert(0, Groups.ElementAt(j).Blocks.ElementAt(k).EcWords.ElementAt(i));
+                        IntelevedBlockArray.Add(new BitArray(tempBytes.ToArray()));
+                        tempBytes.Clear();
                     }
-                }
-                IntelevedBlockArray.Add(new BitArray(tempBytes.ToArray()));
-                tempBytes.Clear();
+                }                
             }
         }
 
         private void AddRemainders ()
         {
-            IntelevedBlockArray.Add(new BitArray(RequiredRemainder));
+            if (RequiredRemainder != 0)
+            {
+                IntelevedBlockArray.Add(new BitArray(RequiredRemainder));
+            }
         }
     }
 }

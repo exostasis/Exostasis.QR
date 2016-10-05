@@ -21,7 +21,7 @@ namespace Exostasis.QR.ErrorCorrection
 
         public byte[] GenerateErrorCorrectionArray()
         {
-             CreateMessageExpression();
+            CreateMessageExpression();
             GenerateErrorCorrectionExpression();
             MessageExp = MessageExp * new AlphaTerm(0, "x", ErrorCorrectionCodeWordsPerBlock);
 

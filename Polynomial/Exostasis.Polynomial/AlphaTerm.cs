@@ -42,7 +42,7 @@ namespace Exostasis.Polynomial
 
         public static AlphaTerm operator* (AlphaTerm a1, AlphaTerm a2)
         {
-            return new AlphaTerm((a1._exponent + a2._exponent) % 256, a1._variable * a2._variable);
+            return new AlphaTerm((a1._exponent + a2._exponent) % 255, a1._variable * a2._variable);
         }
 
         public static AlphaTerm operator+ (AlphaTerm a1, AlphaTerm a2)

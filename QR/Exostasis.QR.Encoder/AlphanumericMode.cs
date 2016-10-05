@@ -29,16 +29,12 @@ namespace Exostasis.QR.Encoder
         {
             List<BitArray> bitArrays = new List<BitArray>();
 
-            int length = UnencodedString.Length;
-            int tempValue = 0;
-
-            byte[] tempBytes;
-
             bitArrays.Add(new BitArray(ModeIndicator));
             bitArrays.Add(new BitArray(CharacterCountIndicator));       
 
             for (int i = 0; i < UnencodedString.Length; i += 2)
             {
+                int tempValue;
                 if (i + 1 >= UnencodedString.Length)
                 {
                     bitArrays.Add(new BitArray(6));
@@ -51,7 +47,7 @@ namespace Exostasis.QR.Encoder
                         GetIntValueOfChar(UnencodedString.ElementAt(i + 1));
                 }
 
-                tempBytes = BitConverter.GetBytes(tempValue);
+                var tempBytes = BitConverter.GetBytes(tempValue);
 
                 for (int j = 0; j < bitArrays.Last().Count; j++)
                 {
@@ -92,7 +88,7 @@ namespace Exostasis.QR.Encoder
                 case '7':
                 case '8':
                 case '9':
-                    return (int) Char.GetNumericValue(Char);
+                    return (int) char.GetNumericValue(Char);
                 case 'A':
                     return 10;
                 case 'B':

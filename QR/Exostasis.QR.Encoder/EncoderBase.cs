@@ -124,7 +124,7 @@ namespace Exostasis.QR.Encoder
         {
             int maximumLength = 0;
 
-            for (int i = (int)ErrorCorrectionLevel.H; i <= 0; ++i)
+            for (int i = (int)ErrorCorrectionLevel.H; i >= 0; --i)
             {
                 ErrorCorrectionLevel = (ErrorCorrectionLevel)i;
 

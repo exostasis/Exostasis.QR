@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using Exostasis.QR.Common.Image;
 using System.Drawing;
-using System.IO.Ports;
-using System.Linq;
 using Exostasis.QR.Common;
 
 namespace Exostasis.QR.Image
@@ -59,7 +57,7 @@ namespace Exostasis.QR.Image
 
         private void AddDarkModule()
         {
-            new Module(new Cord(BottomLeftFinderPattern.TopRightCord.X + 1, BottomLeftFinderPattern.TopRightCord.Y), 
+            new Module(new Cord(BottomLeftFinderPattern.TopRightCord.X + 1, BottomLeftFinderPattern.TopRightCord.Y - 1), 
                 Color.Black, ref _elements);
         }
 
@@ -152,7 +150,7 @@ namespace Exostasis.QR.Image
                             {
                                 for (int j = 0; j < Scale; ++j)
                                 {
-                                    qrBitmap.SetPixel(x * Scale + i, y * Scale + j, Color.Green);
+                                    qrBitmap.SetPixel(x * Scale + i, y * Scale + j, Color.Blue);
                                 }
                             }
                         }
@@ -168,59 +166,102 @@ namespace Exostasis.QR.Image
             int y = GetModuleSize() - 1;
             int listElement = 0;
             int listIndex = 0;
+            bool goingUp = true;
 
             while (listIndex < structuredArray.Count)
             {
                 if (x >= TopRightFinderPattern.BottomLeftCord.X - 1 && x < TopRightFinderPattern.BottomRightCord.X && 
                     y == TopRightFinderPattern.BottomLeftCord.Y + 1)
                 {
-                    // reserved for format information              
                 }
-                else if (x >= TopLeftFinderPattern.BottomLeftCord.X && x <= TopLeftFinderPattern.BottomLeftCord.X + 1 && 
+                else if (x >= TopLeftFinderPattern.BottomLeftCord.X && x <= TopLeftFinderPattern.BottomRightCord.X + 1 && 
                     y == TopLeftFinderPattern.BottomLeftCord.Y + 1)
                 {
-                    // reserved for format information
                 }
                 else if (x == TopLeftFinderPattern.TopRightCord.X + 1 && y >= TopLeftFinderPattern.TopRightCord.Y && 
                     y <= TopLeftFinderPattern.BottomRightCord.Y + 1)
                 {
-                    // reserved for format information
                 }
                 else if (x == BottomLeftFinderPattern.TopRightCord.X + 1 && y >= BottomLeftFinderPattern.TopRightCord.Y &&
                     y < BottomLeftFinderPattern.BottomRightCord.Y)
                 {
-                    // reserved for format information
                 }
                 else if (Version >= 6 && x >= TopRightFinderPattern.TopLeftCord.X - 4 && x < TopRightFinderPattern.TopLeftCord.X - 1 &&
                     y >= TopRightFinderPattern.TopLeftCord.Y && y < TopRightFinderPattern.BottomLeftCord.Y)
                 {
-                    // reserved for version information
                 }
                 else if (Version >= 6 && x >= BottomLeftFinderPattern.TopLeftCord.X && x < BottomLeftFinderPattern.TopRightCord.X - 1 &&
-                    y >= BottomLeftFinderPattern.TopLeftCord.Y - 4 && y < TopRightFinderPattern.BottomLeftCord.Y - 1)
+                    y >= BottomLeftFinderPattern.TopLeftCord.Y - 4 && y < BottomLeftFinderPattern.TopLeftCord.Y - 1)
                 {
-                    // reserved for version information
                 }
                 else if (_elements[x, y] == null)
                 {
-                    new Module(new Cord(x, y), structuredArray.ElementAt(listIndex)[listElement] ? Color.Black : Color.White, ref _elements);
+                    new Module(new Cord(x, y), structuredArray[listIndex][listElement] ? Color.Black : Color.White, ref _elements);
+
+                    if (listElement == structuredArray[listIndex].Count - 1)
+                    {
+                        ++listIndex;
+                        listElement = 0;
+                    }
+                    else
+                    {
+                        ++listElement;
+                    }
                 }
 
-                if (x + 1 == LeftTimingPattern.TopLeftCord.X)
+                if (x - 1 == LeftTimingPattern.TopLeftCord.X && y == 0)
                 {
+                    x -= 2;
+                    goingUp = !goingUp;
                 }
-                else if (y == 0)
+                else if (y == 0 && x <= 5 && x % 2 == 0 && goingUp)
                 {
-                    
+                    --x;
+                    goingUp = !goingUp;
                 }
-                else if (y == GetModuleSize() - 1)
+                else if (y == GetModuleSize() - 1 && x <= 5 && x % 2 == 0 && !goingUp)
                 {
-                    
+                    --x;
+                    goingUp = !goingUp;
+                }                
+                else if (x <= 5 && x % 2 == 1)
+                {
+                    --x;                
+                }
+                else if (x <= 5 && x % 2 == 0 && goingUp)
+                {
+                    ++x;
+                    --y;
+                }
+                else if (x <= 5 && x % 2 == 0)
+                {
+                    ++x;
+                    ++y;
+                }
+                else if (y == GetModuleSize() - 1 && x % 2 == 1 && !goingUp)
+                {
+                    --x;
+                    goingUp = !goingUp;
+                }
+                else if (y == 0 && x % 2 == 1 && goingUp)
+                {
+                    --x;
+                    goingUp = !goingUp;
                 }
                 else if (x % 2 == 0)
                 {
-                    
+                    --x;
                 }
+                else if (goingUp)
+                {
+                    ++x;
+                    --y;
+                }
+                else
+                {
+                    ++x;
+                    ++y;
+                }                                
             }
         }
     }

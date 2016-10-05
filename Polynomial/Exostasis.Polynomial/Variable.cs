@@ -31,7 +31,7 @@ namespace Exostasis.Polynomial
             {
                 throw new Exception("Cannot times to variables that don't have the same base");
             }
-            return new Variable(v1._variable, (v1._exponent + v2._exponent) % 256);
+            return new Variable(v1._variable, (v1._exponent + v2._exponent) % 255);
         }
 
         public override bool Equals (Object obj)
