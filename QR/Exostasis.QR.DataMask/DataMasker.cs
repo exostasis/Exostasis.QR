@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Net;
-using System.Runtime.InteropServices;
+using Exostasis.QR.Common.Extensions;
 using Exostasis.QR.Common.Image;
 
 namespace Exostasis.QR.DataMask
@@ -19,7 +18,7 @@ namespace Exostasis.QR.DataMask
 
         private List<Element> ExcludedElements { get; set; }
         private Module[,] Image { get; set; }
-        
+
         public DataMasker(int version, List<Element> excludedElements, Module[,] image, int size)
         {
             Version = version;
@@ -30,204 +29,212 @@ namespace Exostasis.QR.DataMask
 
         public void CalculateDataMask()
         {
-            Module[,] tempImage = new Module[Size, Size];
+            Module[,] tempImage;
 
-            int lowestPenaltyPoints = TryDataMask1(Image, ref tempImage);
+            tempImage = TryDataMask1(Image);
+            int lowestPenaltyPoints = CalculatePenalty(tempImage);
             MaskedImage = tempImage;
             MaskVerion = 0;
 
-            int penaltyPoints = TryDataMask2(Image, ref tempImage);
+            tempImage = TryDataMask2(Image);
+            int penaltyPoints = CalculatePenalty(tempImage);
             if (penaltyPoints < lowestPenaltyPoints)
             {
                 MaskedImage = tempImage;
                 MaskVerion = 1;
             }
 
-            penaltyPoints = TryDataMask3(Image, ref tempImage);
+            tempImage = TryDataMask3(Image);
+            penaltyPoints = CalculatePenalty(tempImage);
             if (penaltyPoints < lowestPenaltyPoints)
             {
                 MaskedImage = tempImage;
                 MaskVerion = 2;
             }
 
-            penaltyPoints = TryDataMask4(Image, ref tempImage);
+            tempImage = TryDataMask4(Image);
+            penaltyPoints = CalculatePenalty(tempImage);
             if (penaltyPoints < lowestPenaltyPoints)
             {
                 MaskedImage = tempImage;
                 MaskVerion = 3;
             }
 
-            penaltyPoints = TryDataMask5(Image, ref tempImage);
+            tempImage = TryDataMask5(Image);
+            penaltyPoints = CalculatePenalty(Image);
             if (penaltyPoints < lowestPenaltyPoints)
             {
                 MaskedImage = tempImage;
                 MaskVerion = 4;
             }
 
-            penaltyPoints = TryDataMask6(Image, ref tempImage);
+            tempImage = TryDataMask6(Image);
+            penaltyPoints = CalculatePenalty(tempImage);
             if (penaltyPoints < lowestPenaltyPoints)
             {
                 MaskedImage = tempImage;
                 MaskVerion = 5;
             }
 
-            penaltyPoints = TryDataMask7(Image, ref tempImage);
+            tempImage = TryDataMask7(Image);
+            penaltyPoints = CalculatePenalty(tempImage);
             if (penaltyPoints < lowestPenaltyPoints)
             {
                 MaskedImage = tempImage;
                 MaskVerion = 6;
             }
 
-            penaltyPoints = TryDataMask8(Image, ref tempImage);
+            tempImage = TryDataMask8(Image);
+            penaltyPoints = CalculatePenalty(tempImage);
             if (penaltyPoints < lowestPenaltyPoints)
             {
                 MaskedImage = tempImage;
                 MaskVerion = 7;
             }
-        }        
-
-        private int TryDataMask1(Module[,] inputImage, ref Module[,] outImage)
-        {
-            outImage = inputImage;
-
-            for (int y = 0; y < Size; ++y)
-            {
-                for (int x = 0; x < Size; ++x)
-                {
-                    if ((x + y) % 2 == 0 && !IsExcludedRegion(x, y))
-                    {
-                        outImage[x, y].InvertPixelColor();
-                    }
-                }
-            }
-
-            return CalculatePenalty(outImage);
         }
 
-        private int TryDataMask2(Module[,] inputImage, ref Module[,] outImage)
+        private Module[,] TryDataMask1(Module[,] inputImage)
         {
-            outImage = inputImage;
+            var outImage = inputImage.DeepCopy();
 
             for (int y = 0; y < Size; ++y)
             {
                 for (int x = 0; x < Size; ++x)
                 {
-                    if (x % 2 == 0 && !IsExcludedRegion(x, y))
+                    if ((x + y)%2 == 0 && !IsExcludedRegion(x, y))
                     {
                         outImage[x, y].InvertPixelColor();
                     }
                 }
             }
 
-            return CalculatePenalty(outImage);
+            return outImage;
         }
 
-        private int TryDataMask3(Module[,] inputImage, ref Module[,] outImage)
+        private Module[,] TryDataMask2(Module[,] inputImage)
         {
-            outImage = inputImage;
+            var outImage = inputImage.DeepCopy();
 
             for (int y = 0; y < Size; ++y)
             {
                 for (int x = 0; x < Size; ++x)
                 {
-                    if (y % 3 == 0 && !IsExcludedRegion(x, y))
+                    if (x%2 == 0 && !IsExcludedRegion(x, y))
                     {
                         outImage[x, y].InvertPixelColor();
                     }
                 }
             }
 
-            return CalculatePenalty(outImage);
+            return outImage;
         }
 
-        private int TryDataMask4(Module[,] inputImage, ref Module[,] outImage)
+        private Module[,] TryDataMask3(Module[,] inputImage)
         {
-            outImage = inputImage;
+            var outImage = inputImage.DeepCopy();
 
             for (int y = 0; y < Size; ++y)
             {
                 for (int x = 0; x < Size; ++x)
                 {
-                    if ((x + y) % 3 == 0 && !IsExcludedRegion(x, y))
+                    if (y%3 == 0 && !IsExcludedRegion(x, y))
                     {
                         outImage[x, y].InvertPixelColor();
                     }
                 }
             }
 
-            return CalculatePenalty(outImage);
+            return outImage;
         }
 
-        private int TryDataMask5(Module[,] inputImage, ref Module[,] outImage)
+        private Module[,] TryDataMask4(Module[,] inputImage)
         {
-            outImage = inputImage;
+            var outImage = inputImage.DeepCopy();
 
             for (int y = 0; y < Size; ++y)
             {
                 for (int x = 0; x < Size; ++x)
                 {
-                    if ((Math.Floor((decimal) x / 2) + Math.Floor((decimal) y / 3)) % 2 == 0 && !IsExcludedRegion(x, y))
+                    if ((x + y)%3 == 0 && !IsExcludedRegion(x, y))
                     {
                         outImage[x, y].InvertPixelColor();
                     }
                 }
             }
 
-            return CalculatePenalty(outImage);
+            return outImage;
         }
 
-        private int TryDataMask6(Module[,] inputImage, ref Module[,] outImage)
+        private Module[,] TryDataMask5(Module[,] inputImage)
         {
-            outImage = inputImage;
+            var outImage = inputImage.DeepCopy();
 
             for (int y = 0; y < Size; ++y)
             {
                 for (int x = 0; x < Size; ++x)
                 {
-                    if (x * y % 2 + x * y % 3 == 0 && !IsExcludedRegion(x, y))
+                    if ((Math.Floor((decimal) x/2) + Math.Floor((decimal) y/3))%2 == 0 && !IsExcludedRegion(x, y))
                     {
                         outImage[x, y].InvertPixelColor();
                     }
                 }
             }
 
-            return CalculatePenalty(outImage);
+            return outImage;
         }
 
-        private int TryDataMask7(Module[,] inputImage, ref Module[,] outImage)
+        private Module[,] TryDataMask6(Module[,] inputImage)
         {
-            outImage = inputImage;
+            var outImage = inputImage.DeepCopy();
 
             for (int y = 0; y < Size; ++y)
             {
                 for (int x = 0; x < Size; ++x)
                 {
-                    if ((x * y % 2 + x * y % 3) % 2 == 0 && !IsExcludedRegion(x, y))
+                    if (x*y%2 + x*y%3 == 0 && !IsExcludedRegion(x, y))
                     {
                         outImage[x, y].InvertPixelColor();
                     }
                 }
             }
 
-            return CalculatePenalty(outImage);
+            return outImage;
         }
 
-        private int TryDataMask8(Module[,] inputImage, ref Module[,] outImage)
+        private Module[,] TryDataMask7(Module[,] inputImage)
         {
-            outImage = inputImage;
+            var outImage = inputImage.DeepCopy();
 
             for (int y = 0; y < Size; ++y)
             {
                 for (int x = 0; x < Size; ++x)
                 {
-                    if (((x + y) % 2 + x * y % 3) % 2 == 0 && !IsExcludedRegion(x, y))
+                    if ((x*y%2 + x*y%3)%2 == 0 && !IsExcludedRegion(x, y))
                     {
                         outImage[x, y].InvertPixelColor();
                     }
                 }
             }
 
-            return CalculatePenalty(outImage);
+            return outImage;
+        }
+
+        private Module[,] TryDataMask8(Module[,] inputImage)
+        {
+            var outImage = inputImage.DeepCopy();
+
+            for (int y = 0; y < Size; ++y)
+            {
+                for (int x = 0; x < Size; ++x)
+                {
+                    if (((x + y)%2 + x*y%3)%2 == 0 && !IsExcludedRegion(x, y))
+                    {
+                        outImage[x, y].InvertPixelColor();
+                    }
+                }
+            }
+
+            return outImage;
         }
 
         private bool IsExcludedRegion(int x, int y)
@@ -245,7 +252,7 @@ namespace Exostasis.QR.DataMask
             penalty += CalculateRule4(image);
 
             return penalty;
-        }       
+        }
 
         private int CalculateRule1(Module[,] image)
         {
@@ -273,12 +280,12 @@ namespace Exostasis.QR.DataMask
                             previousColor = image[x, y].PixelColor;
                             if (consecutiveColorCount >= 5)
                             {
-                                penalty += 3 + (consecutiveColorCount - 3);                                
+                                penalty += 3 + (consecutiveColorCount - 5);
                             }
 
                             consecutiveColorCount = 0;
                         }
-                    }             
+                    }
                 }
 
                 consecutiveColorCount = 0;
@@ -305,7 +312,7 @@ namespace Exostasis.QR.DataMask
                             previousColor = image[x, y].PixelColor;
                             if (consecutiveColorCount >= 5)
                             {
-                                penalty += 3 + (consecutiveColorCount - 3);
+                                penalty += 3 + (consecutiveColorCount - 5);
                             }
 
                             consecutiveColorCount = 0;
@@ -322,17 +329,104 @@ namespace Exostasis.QR.DataMask
 
         private int CalculateRule2(Module[,] image)
         {
-            throw new NotImplementedException();
+            var penalty = 0;
+
+            for (int y = 0; y < Size - 1; ++y)
+            {
+                for (int x = 0; x < Size - 1; ++x)
+                {
+                    if (image[x, y].PixelColor == image[x + 1, y].PixelColor &&
+                        image[x, y].PixelColor == image[x, y + 1].PixelColor &&
+                        image[x, y].PixelColor == image[x + 1, y + 1].PixelColor)
+                    {
+                        penalty += 3;
+                    }
+                }
+            }
+
+            return penalty;
         }
 
         private int CalculateRule3(Module[,] image)
         {
-            throw new NotImplementedException();
+            var penalty = 0;
+
+            for (int y = 0; y < Size - 11; ++y)
+            {
+                for (int x = 0; x < Size - 11; ++x)
+                {
+                    if (image[x, y].PixelColor == Color.Black && image[x + 1, y].PixelColor == Color.White &&
+                        image[x + 2, y].PixelColor == Color.Black && image[x + 3, y].PixelColor == Color.Black &&
+                        image[x + 4, y].PixelColor == Color.Black && image[x + 5, y].PixelColor == Color.White &&
+                        image[x + 6, y].PixelColor == Color.Black && image[x + 7, y].PixelColor == Color.White &&
+                        image[x + 8, y].PixelColor == Color.White && image[x + 9, y].PixelColor == Color.White &&
+                        image[x + 10, y].PixelColor == Color.White)
+                    {
+                        penalty += 40;
+                    }
+                    else if (image[x, y].PixelColor == Color.Black && image[x, y + 1].PixelColor == Color.White &&
+                             image[x, y + 2].PixelColor == Color.Black && image[x, y + 3].PixelColor == Color.Black &&
+                             image[x, y + 4].PixelColor == Color.Black && image[x, y + 5].PixelColor == Color.White &&
+                             image[x, y + 6].PixelColor == Color.Black && image[x, y + 7].PixelColor == Color.White &&
+                             image[x, y + 8].PixelColor == Color.White && image[x, y + 9].PixelColor == Color.White &&
+                             image[x, y + 10].PixelColor == Color.White)
+                    {
+                        penalty += 40;
+                    }
+                    else if (image[x, y].PixelColor == Color.White && image[x + 1, y].PixelColor == Color.White &&
+                             image[x + 2, y].PixelColor == Color.White && image[x + 3, y].PixelColor == Color.White &&
+                             image[x + 4, y].PixelColor == Color.Black && image[x + 5, y].PixelColor == Color.White &&
+                             image[x + 6, y].PixelColor == Color.Black && image[x + 7, y].PixelColor == Color.Black &&
+                             image[x + 8, y].PixelColor == Color.Black && image[x + 9, y].PixelColor == Color.White &&
+                             image[x + 10, y].PixelColor == Color.Black)
+                    {
+                        penalty += 40;
+                    }
+                    else if (image[x, y].PixelColor == Color.White && image[x, y + 1].PixelColor == Color.White &&
+                             image[x, y + 2].PixelColor == Color.White && image[x, y + 3].PixelColor == Color.White &&
+                             image[x, y + 4].PixelColor == Color.Black && image[x, y + 5].PixelColor == Color.White &&
+                             image[x, y + 6].PixelColor == Color.Black && image[x, y + 7].PixelColor == Color.Black &&
+                             image[x, y + 8].PixelColor == Color.Black && image[x, y + 9].PixelColor == Color.White &&
+                             image[x, y + 10].PixelColor == Color.Black)
+                    {
+                        penalty += 40;
+                    }
+                }
+            }
+
+            return penalty;
         }
 
         private int CalculateRule4(Module[,] image)
         {
-            throw new NotImplementedException();
+            int numModules = Size*Size;
+            int countBlackModule = 0;
+
+            for (int y = 0; y < Size; ++y)
+            {
+                for (int x = 0; x < Size; ++x)
+                {
+                    if (image[x, y].PixelColor == Color.Black)
+                    {
+                        ++countBlackModule;
+                    }
+                }
+            }
+
+            int percentage = (int) ((double) countBlackModule / numModules * 100);
+
+            var lowerMultiple = percentage - percentage % 5;
+            var upperMultiple = percentage + (5 - percentage % 5);
+
+            var lowerAbsolute = Math.Abs(lowerMultiple - 50);
+            var upperAbsolute = Math.Abs(upperMultiple - 50);
+
+            if (lowerAbsolute / 5 < upperAbsolute / 5)
+            {
+                return 10 * lowerAbsolute / 5;
+            }
+
+            return 10 * upperAbsolute / 5;
         }
     }
 }

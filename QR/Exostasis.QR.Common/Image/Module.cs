@@ -1,7 +1,9 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 
 namespace Exostasis.QR.Common.Image
 {
+    [Serializable]
     public class Module : Element
     {
         public Color PixelColor { get; private set; }

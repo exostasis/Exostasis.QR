@@ -1,8 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Exostasis.QR.Common.Image;
 using System.Drawing;
 using Exostasis.QR.Common;
+using Exostasis.QR.Common.Enum;
 using Exostasis.QR.DataMask;
 
 namespace Exostasis.QR.Image
@@ -22,11 +24,14 @@ namespace Exostasis.QR.Image
 
         private List<Element> ExcludedElments { get; }
 
-        public QrImage(int version, int scale, List<BitArray> structuredArray)
+        private ErrorCorrectionLevel ErrorCorrectionLevel { get; }
+
+        public QrImage(int version, int scale, List<BitArray> structuredArray, ErrorCorrectionLevel errorCorrectionLevel)
         {
             Version = version;
             Scale = scale;
-            _elements = new Module[GetModuleSize(), GetModuleSize()]; 
+            _elements = new Module[GetModuleSize(), GetModuleSize()];
+            ErrorCorrectionLevel = errorCorrectionLevel;
             ExcludedElments = new List<Element>();           
             AddFinderPatterns();
             AddSeperators();
@@ -36,7 +41,8 @@ namespace Exostasis.QR.Image
             WriteBitArray(structuredArray);
 
             var dataMasker = new DataMasker(Version, ExcludedElments, _elements, GetModuleSize());
-            dataMasker.CalculateDataMask();        
+            dataMasker.CalculateDataMask();
+            WriteFormatStringAndVersionInformation(dataMasker.MaskVerion);
         }        
 
         private void AddAlignmentPatterns()
@@ -108,12 +114,7 @@ namespace Exostasis.QR.Image
 
             ExcludedElments.Add(TopTimingPattern);
             ExcludedElments.Add(LeftTimingPattern);
-        }
-
-        private int GetModuleSize()
-        {
-            return Version * 4 + 21;
-        }
+        }        
 
         private List<Cord> CalculateAlignmentPatternCords()
         {
@@ -136,6 +137,31 @@ namespace Exostasis.QR.Image
             }
 
             return cords;
+        }
+
+        private int GetModuleSize()
+        {
+            return Version * 4 + 21;
+        }
+
+        private void WriteFormatStringAndVersionInformation(int maskVersion)
+        {
+            int errorCorrectionValue = 0;
+
+            if (ErrorCorrectionLevel == ErrorCorrectionLevel.H)
+            {
+                errorCorrectionValue = 2;
+            }
+            else if (ErrorCorrectionLevel == ErrorCorrectionLevel.L)
+            {
+                errorCorrectionValue = 1;
+            }
+            else if (ErrorCorrectionLevel == ErrorCorrectionLevel.Q)
+            {
+                errorCorrectionValue = 3;
+            }
+
+            byte versionString = Convert.ToByte((errorCorrectionValue << 3) + maskVersion);
         }
 
         public void WriteImage(string filename)

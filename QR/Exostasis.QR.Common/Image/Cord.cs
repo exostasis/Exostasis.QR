@@ -1,5 +1,8 @@
-﻿namespace Exostasis.QR.Common.Image
+﻿using System;
+
+namespace Exostasis.QR.Common.Image
 {
+    [Serializable]
     public class Cord
     {
         public int X { get; private set; }

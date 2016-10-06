@@ -1,5 +1,8 @@
-﻿namespace Exostasis.QR.Common.Image
+﻿using System;
+
+namespace Exostasis.QR.Common.Image
 {
+    [Serializable]
     public abstract class Element
     {
         public Cord TopLeftCord { get; protected set; }
