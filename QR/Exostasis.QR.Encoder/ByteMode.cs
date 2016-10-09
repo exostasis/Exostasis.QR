@@ -10,7 +10,7 @@ namespace QREncoder
     {
         public ByteMode (string unencodedString) : base (unencodedString)
         {
-            ModeIndicator = new BitArray(BitConverter.GetBytes(0x01));
+            ModeIndicator = new BitArray(BitConverter.GetBytes(0x04));
             ModeIndicator.Length = 4;
             DataPerBitString = 1;
             BitsPerBitString = 8;

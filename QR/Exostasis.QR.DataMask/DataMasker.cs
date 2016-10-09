@@ -42,6 +42,7 @@ namespace Exostasis.QR.DataMask
             {
                 MaskedImage = tempImage;
                 MaskVerion = 1;
+                lowestPenaltyPoints = penaltyPoints;
             }
 
             tempImage = TryDataMask3(Image);
@@ -50,6 +51,7 @@ namespace Exostasis.QR.DataMask
             {
                 MaskedImage = tempImage;
                 MaskVerion = 2;
+                lowestPenaltyPoints = penaltyPoints;
             }
 
             tempImage = TryDataMask4(Image);
@@ -58,6 +60,7 @@ namespace Exostasis.QR.DataMask
             {
                 MaskedImage = tempImage;
                 MaskVerion = 3;
+                lowestPenaltyPoints = penaltyPoints;
             }
 
             tempImage = TryDataMask5(Image);
@@ -66,6 +69,7 @@ namespace Exostasis.QR.DataMask
             {
                 MaskedImage = tempImage;
                 MaskVerion = 4;
+                lowestPenaltyPoints = penaltyPoints;
             }
 
             tempImage = TryDataMask6(Image);
@@ -74,6 +78,7 @@ namespace Exostasis.QR.DataMask
             {
                 MaskedImage = tempImage;
                 MaskVerion = 5;
+                lowestPenaltyPoints = penaltyPoints;
             }
 
             tempImage = TryDataMask7(Image);
@@ -82,6 +87,7 @@ namespace Exostasis.QR.DataMask
             {
                 MaskedImage = tempImage;
                 MaskVerion = 6;
+                lowestPenaltyPoints = penaltyPoints;
             }
 
             tempImage = TryDataMask8(Image);
@@ -119,7 +125,7 @@ namespace Exostasis.QR.DataMask
             {
                 for (int x = 0; x < Size; ++x)
                 {
-                    if (x%2 == 0 && !IsExcludedRegion(x, y))
+                    if (y%2 == 0 && !IsExcludedRegion(x, y))
                     {
                         outImage[x, y].InvertPixelColor();
                     }
@@ -137,7 +143,7 @@ namespace Exostasis.QR.DataMask
             {
                 for (int x = 0; x < Size; ++x)
                 {
-                    if (y%3 == 0 && !IsExcludedRegion(x, y))
+                    if (x%3 == 0 && !IsExcludedRegion(x, y))
                     {
                         outImage[x, y].InvertPixelColor();
                     }
@@ -173,7 +179,7 @@ namespace Exostasis.QR.DataMask
             {
                 for (int x = 0; x < Size; ++x)
                 {
-                    if ((Math.Floor((decimal) x/2) + Math.Floor((decimal) y/3))%2 == 0 && !IsExcludedRegion(x, y))
+                    if ((Math.Floor((decimal) y/2) + Math.Floor((decimal) x/3))%2 == 0 && !IsExcludedRegion(x, y))
                     {
                         outImage[x, y].InvertPixelColor();
                     }
@@ -191,7 +197,7 @@ namespace Exostasis.QR.DataMask
             {
                 for (int x = 0; x < Size; ++x)
                 {
-                    if (x*y%2 + x*y%3 == 0 && !IsExcludedRegion(x, y))
+                    if (x * y % 2 + x * y % 3 == 0 && !IsExcludedRegion(x, y))
                     {
                         outImage[x, y].InvertPixelColor();
                     }

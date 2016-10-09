@@ -1,6 +1,7 @@
 ﻿using Exostasis.Polynomial.Extensions;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Exostasis.Polynomial
 {
@@ -35,10 +36,16 @@ namespace Exostasis.Polynomial
 
         public List<ConstantTerm> GetConstantExpression ()
         {
+            int prevExponent = _terms[0]._variable._exponent + 1;
             List<ConstantTerm> expression = new List<ConstantTerm>();
             foreach (AlphaTerm a in _terms)
             {
+                if (a._variable._exponent != prevExponent - 1)
+                {
+                    expression.Add(new ConstantTerm(0, new Variable(a._variable._variable, prevExponent - 1)));
+                }
                 expression.Add(new ConstantTerm(a.AntiLog()));
+                prevExponent = a._variable._exponent;
             }
 
             return expression;
@@ -61,6 +68,8 @@ namespace Exostasis.Polynomial
                     }
                 }
             }
+
+            _terms = _terms.OrderBy(term => term._variable._exponent).Reverse().ToList();
         }
 
         public static Expression operator* (Expression e1, AlphaTerm a1)
@@ -100,29 +109,53 @@ namespace Exostasis.Polynomial
             return results;
         }
 
+        public static Expression LongDivisionXTimes(Expression dividen, Expression divisor, int times)
+        {
+            Expression results = new Expression(dividen);
+            for (int i = 0; i < times; ++i)
+            {
+                AlphaTerm multiplier = new AlphaTerm(results._terms[0]._exponent, results._terms[0]._variable._variable, results._terms[0]._variable._exponent - divisor._terms[0]._variable._exponent);
+                results = (divisor * multiplier) ^ results;
+                Console.Write($"{i + 1}: ");
+                results.DisplayConstantExpression();
+                Console.Write("\n");
+            }
+
+            return results;
+        }
+
         public static Expression operator^ (Expression e1, Expression e2)
         {
             Expression results = new Expression();
 
-            int lowestCount = e1._terms.Count > e2._terms.Count ? e2._terms.Count : e1._terms.Count;
+            int e1Index = 0;
+            int e2Index = 0;
 
-            for (int i = 0; i < lowestCount; ++i)
+            while (e1Index < e1._terms.Count && e2Index < e2._terms.Count)
             {
-                results.AddTerm(e1._terms[i] + e2._terms[i]);
-            }
-
-            if (e1._terms.Count == lowestCount)
-            {
-                for (int i = lowestCount; i < e2._terms.Count; ++ i)
+                if (e1._terms[e1Index].EqualVariables(e2._terms[e2Index]))
                 {
-                    results.AddTerm(e2._terms[i]);
+                    results.AddTerm(e1._terms[e1Index++] + e2._terms[e2Index++]);                    
                 }
+                else
+                {
+                    results.AddTerm(e1._terms[e1Index++]);
+                }                
             }
-            else
+
+            if (e1Index != e1._terms.Count)
             {
-                for (int i = lowestCount; i < e1._terms.Count; ++i)
+                for (int i = e1Index; i < e1._terms.Count; ++ i)
                 {
                     results.AddTerm(e1._terms[i]);
+                }
+            }
+            
+            if (e2Index != e2._terms.Count)
+            {
+                for (int i = e2Index; i < e2._terms.Count; ++i)
+                {
+                    results.AddTerm(e2._terms[i]);
                 }
             }
 
@@ -134,6 +167,19 @@ namespace Exostasis.Polynomial
             foreach(AlphaTerm a in _terms)
             {
                 a.DisplayAlphaTerm();
+                if (a != _terms[_terms.Count - 1])
+                {
+                    Console.Write(" + ");
+                }
+            }
+        }
+
+        public void DisplayConstantExpression()
+        {
+            foreach (AlphaTerm a in _terms)
+            {
+                Console.Write($"{a.AntiLog()}");
+                a._variable.DisplayVariable();
                 if (a != _terms[_terms.Count - 1])
                 {
                     Console.Write(" + ");

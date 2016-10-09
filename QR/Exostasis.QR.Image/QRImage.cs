@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Exostasis.QR.Common.Image;
 using System.Drawing;
+using System.Threading;
 using Exostasis.QR.Common;
 using Exostasis.QR.Common.Enum;
 using Exostasis.QR.DataMask;
@@ -42,6 +43,7 @@ namespace Exostasis.QR.Image
 
             var dataMasker = new DataMasker(Version, ExcludedElments, _elements, GetModuleSize());
             dataMasker.CalculateDataMask();
+            _elements = dataMasker.MaskedImage;
             WriteFormatStringAndVersionInformation(dataMasker.MaskVerion);
         }        
 
@@ -161,34 +163,280 @@ namespace Exostasis.QR.Image
                 errorCorrectionValue = 3;
             }
 
-            byte versionString = Convert.ToByte((errorCorrectionValue << 3) + maskVersion);
+            BitArray formatBits = new BitArray(BitConverter.GetBytes((errorCorrectionValue << 13) + (maskVersion << 10)));
+            for (int i = formatBits.Count - 1; i >= 0; --i)
+            {
+                if (!formatBits[i])
+                {
+                    --formatBits.Length;
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            int countBits = formatBits.Count;
+            var errorCorrection = new BitArray(formatBits);
+            while (countBits > 10)
+            {
+                BitArray generatorBits = new BitArray(BitConverter.GetBytes(1335 << (countBits - 11)));
+                generatorBits.Length = countBits;
+
+                errorCorrection = errorCorrection.Xor(generatorBits);
+
+                for (int i = errorCorrection.Count - 1; i >= 0; --i)
+                {
+                    if (errorCorrection[i])
+                    {
+                        countBits = i + 1;
+                        break;
+                    }
+                }
+                errorCorrection.Length = countBits;
+            }
+
+            errorCorrection.Length = 10;
+
+            var informationString = new BitArray(15);
+
+            for (int i = formatBits.Count - 1; i >= 0; --i)
+            {
+                if (i > 14 - 5)
+                {
+                    informationString[i] = formatBits[i];
+                }
+                else
+                {
+                    informationString[i] = errorCorrection[i];
+                }
+            }
+
+            var maskString = new BitArray(BitConverter.GetBytes(21522));
+            maskString.Length = 15;
+            informationString = informationString.Xor(maskString);
+
+            for (int i = 0; i < informationString.Count; ++i)
+            {                
+                switch (i)
+                {
+                    case 0:
+                        new Module(new Cord(8, i), informationString[i] ? Color.Black : Color.White, ref _elements);
+                        new Module(new Cord(GetModuleSize() - 1 - i, 8), informationString[i] ? Color.Black : Color.White, ref _elements);
+                        break;
+                    case 1:
+                        new Module(new Cord(8, i), informationString[i] ? Color.Black : Color.White, ref _elements);
+                        new Module(new Cord(GetModuleSize() - 1 - i, 8), informationString[i] ? Color.Black : Color.White, ref _elements);
+                        break;
+                    case 2:
+                        new Module(new Cord(8, i), informationString[i] ? Color.Black : Color.White, ref _elements);
+                        new Module(new Cord(GetModuleSize() - 1 - i, 8), informationString[i] ? Color.Black : Color.White, ref _elements);
+                        break;
+                    case 3:
+                        new Module(new Cord(8, i), informationString[i] ? Color.Black : Color.White, ref _elements);
+                        new Module(new Cord(GetModuleSize() - 1 - i, 8), informationString[i] ? Color.Black : Color.White, ref _elements);
+                        break;
+                    case 4:
+                        new Module(new Cord(8, i), informationString[i] ? Color.Black : Color.White, ref _elements);
+                        new Module(new Cord(GetModuleSize() - 1 - i, 8), informationString[i] ? Color.Black : Color.White, ref _elements);
+                        break;
+                    case 5:
+                        new Module(new Cord(8, i), informationString[i] ? Color.Black : Color.White, ref _elements);
+                        new Module(new Cord(GetModuleSize() - 1 - i, 8), informationString[i] ? Color.Black : Color.White, ref _elements);
+                        break;
+                    case 6:
+                        new Module(new Cord(8, i + 1), informationString[i] ? Color.Black : Color.White, ref _elements);
+                        new Module(new Cord(GetModuleSize() - 1 - i, 8), informationString[i] ? Color.Black : Color.White, ref _elements);
+                        break;
+                    case 7:
+                        new Module(new Cord(8, i + 1), informationString[i] ? Color.Black : Color.White, ref _elements);
+                        new Module(new Cord(GetModuleSize() - 1 - i, 8), informationString[i] ? Color.Black : Color.White, ref _elements);
+                        break;
+                    case 8:
+                        new Module(new Cord(i - 1, 8), informationString[i] ? Color.Black : Color.White, ref _elements);
+                        new Module(new Cord(8, GetModuleSize() + 1 - i), informationString[i] ? Color.Black : Color.White, ref _elements);
+                        break;
+                    case 9:
+                        new Module(new Cord(i - 4, 8), informationString[i] ? Color.Black : Color.White, ref _elements);
+                        new Module(new Cord(8, GetModuleSize() + 3 - i), informationString[i] ? Color.Black : Color.White, ref _elements);
+                        break;
+                    case 10:
+                        new Module(new Cord(i - 6, 8), informationString[i] ? Color.Black : Color.White, ref _elements);
+                        new Module(new Cord(8, GetModuleSize() + 5 - i), informationString[i] ? Color.Black : Color.White, ref _elements);
+                        break;
+                    case 11:
+                        new Module(new Cord(i - 8, 8), informationString[i] ? Color.Black : Color.White, ref _elements);
+                        new Module(new Cord(8, GetModuleSize() + 7 - i), informationString[i] ? Color.Black : Color.White, ref _elements);
+                        break;
+                    case 12:
+                        new Module(new Cord(i - 10, 8), informationString[i] ? Color.Black : Color.White, ref _elements);
+                        new Module(new Cord(8, GetModuleSize() + 9 - i), informationString[i] ? Color.Black : Color.White, ref _elements);
+                        break;
+                    case 13:
+                        new Module(new Cord(i - 12, 8), informationString[i] ? Color.Black : Color.White, ref _elements);
+                        new Module(new Cord(8, GetModuleSize() + 11 - i), informationString[i] ? Color.Black : Color.White, ref _elements);
+                        break;
+                    case 14:
+                        new Module(new Cord(i - 14, 8), informationString[i] ? Color.Black : Color.White, ref _elements);
+                        new Module(new Cord(8, GetModuleSize() + 13 - i), informationString[i] ? Color.Black : Color.White, ref _elements);
+                        break;
+                }
+            }
+
+            BitArray versionBits = new BitArray(BitConverter.GetBytes((Version + 1) << 12));
+            for (int i = versionBits.Count - 1; i >= 0; --i)
+            {
+                if (!versionBits[i])
+                {
+                    --versionBits.Length;
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            countBits = versionBits.Count;
+            errorCorrection = new BitArray(versionBits);
+            while (countBits > 12)
+            {
+                BitArray generatorBits = new BitArray(BitConverter.GetBytes(7973 << (countBits - 13)));
+                generatorBits.Length = countBits;
+
+                errorCorrection = errorCorrection.Xor(generatorBits);
+
+                for (int i = errorCorrection.Count - 1; i >= 0; --i)
+                {
+                    if (errorCorrection[i])
+                    {
+                        countBits = i + 1;
+                        break;
+                    }
+                }
+                errorCorrection.Length = countBits;
+            }
+
+            errorCorrection.Length = 13;
+
+            informationString = new BitArray(18);
+
+            for (int i = versionBits.Count - 1; i >= 0; --i)
+            {
+                if (i > 17 - 6)
+                {
+                    informationString[i] = versionBits[i];
+                }
+                else
+                {
+                    informationString[i] = errorCorrection[i];
+                }
+            }
+
+            for (int i = 0; i < informationString.Count; ++i)
+            {
+                switch (i)
+                {
+                    case 0:
+                        new Module(new Cord(i, GetModuleSize() - 11), informationString[i] ? Color.Black : Color.White, ref _elements);
+                        new Module(new Cord(GetModuleSize() - 11, i), informationString[i] ? Color.Black : Color.White, ref _elements);
+                        break;
+                    case 1:
+                        new Module(new Cord(i - 1, GetModuleSize() - 10), informationString[i] ? Color.Black : Color.White, ref _elements);
+                        new Module(new Cord(GetModuleSize() - 10, i - 1), informationString[i] ? Color.Black : Color.White, ref _elements);
+                        break;
+                    case 2:
+                        new Module(new Cord(i - 2, GetModuleSize() - 9), informationString[i] ? Color.Black : Color.White, ref _elements);
+                        new Module(new Cord(GetModuleSize() - 9, i - 2), informationString[i] ? Color.Black : Color.White, ref _elements);
+                        break;
+                    case 3:
+                        new Module(new Cord(i - 2, GetModuleSize() - 11), informationString[i] ? Color.Black : Color.White, ref _elements);
+                        new Module(new Cord(GetModuleSize() - 11, i - 2), informationString[i] ? Color.Black : Color.White, ref _elements);
+                        break;
+                    case 4:
+                        new Module(new Cord(i - 3, GetModuleSize() - 10), informationString[i] ? Color.Black : Color.White, ref _elements);
+                        new Module(new Cord(GetModuleSize() - 10, i - 3), informationString[i] ? Color.Black : Color.White, ref _elements);
+                        break;
+                    case 5:
+                        new Module(new Cord(i - 4, GetModuleSize() - 9), informationString[i] ? Color.Black : Color.White, ref _elements);
+                        new Module(new Cord(GetModuleSize() - 9, i - 4), informationString[i] ? Color.Black : Color.White, ref _elements);
+                        break;
+                    case 6:
+                        new Module(new Cord(i - 4, GetModuleSize() - 11), informationString[i] ? Color.Black : Color.White, ref _elements);
+                        new Module(new Cord(GetModuleSize() - 11, i - 4), informationString[i] ? Color.Black : Color.White, ref _elements);
+                        break;
+                    case 7:
+                        new Module(new Cord(i - 5, GetModuleSize() - 10), informationString[i] ? Color.Black : Color.White, ref _elements);
+                        new Module(new Cord(GetModuleSize() - 10, i - 5), informationString[i] ? Color.Black : Color.White, ref _elements);
+                        break;
+                    case 8:
+                        new Module(new Cord(i - 6, GetModuleSize() - 9), informationString[i] ? Color.Black : Color.White, ref _elements);
+                        new Module(new Cord(GetModuleSize() - 9, i - 6), informationString[i] ? Color.Black : Color.White, ref _elements);
+                        break;
+                    case 9:
+                        new Module(new Cord(i - 6, GetModuleSize() - 11), informationString[i] ? Color.Black : Color.White, ref _elements);
+                        new Module(new Cord(GetModuleSize() - 11, i - 6), informationString[i] ? Color.Black : Color.White, ref _elements);
+                        break;
+                    case 10:
+                        new Module(new Cord(i - 7, GetModuleSize() - 10), informationString[i] ? Color.Black : Color.White, ref _elements);
+                        new Module(new Cord(GetModuleSize() - 10, i - 7), informationString[i] ? Color.Black : Color.White, ref _elements);
+                        break;
+                    case 11:
+                        new Module(new Cord(i - 8, GetModuleSize() - 9), informationString[i] ? Color.Black : Color.White, ref _elements);
+                        new Module(new Cord(GetModuleSize() - 9, i - 8), informationString[i] ? Color.Black : Color.White, ref _elements);
+                        break;
+                    case 12:
+                        new Module(new Cord(i - 8, GetModuleSize() - 11), informationString[i] ? Color.Black : Color.White, ref _elements);
+                        new Module(new Cord(GetModuleSize() - 11, i - 8), informationString[i] ? Color.Black : Color.White, ref _elements);
+                        break;
+                    case 13:
+                        new Module(new Cord(i - 9, GetModuleSize() - 10), informationString[i] ? Color.Black : Color.White, ref _elements);
+                        new Module(new Cord(GetModuleSize() - 10, i - 9), informationString[i] ? Color.Black : Color.White, ref _elements);
+                        break;
+                    case 14:
+                        new Module(new Cord(i - 10, GetModuleSize() - 9), informationString[i] ? Color.Black : Color.White, ref _elements);
+                        new Module(new Cord(GetModuleSize() - 9, i - 10), informationString[i] ? Color.Black : Color.White, ref _elements);
+                        break;
+                    case 15:
+                        new Module(new Cord(i - 10, GetModuleSize() - 11), informationString[i] ? Color.Black : Color.White, ref _elements);
+                        new Module(new Cord(GetModuleSize() - 11, i - 10), informationString[i] ? Color.Black : Color.White, ref _elements);
+                        break;
+                    case 16:
+                        new Module(new Cord(i - 11, GetModuleSize() - 10), informationString[i] ? Color.Black : Color.White, ref _elements);
+                        new Module(new Cord(GetModuleSize() - 10, i - 11), informationString[i] ? Color.Black : Color.White, ref _elements);
+                        break;
+                    case 17:
+                        new Module(new Cord(i - 12, GetModuleSize() - 9), informationString[i] ? Color.Black : Color.White, ref _elements);
+                        new Module(new Cord(GetModuleSize() - 9, i - 12), informationString[i] ? Color.Black : Color.White, ref _elements);
+                        break;
+                }
+            }
         }
 
         public void WriteImage(string filename)
         {
-            using (var qrBitmap = new Bitmap(GetModuleSize() * Scale, GetModuleSize() * Scale))
+            using (var qrBitmap = new Bitmap((GetModuleSize() + 8) * Scale, (GetModuleSize() + 8) * Scale))
             {
-                for (int y = 0; y < GetModuleSize(); ++y)
+                for (int y = 0; y < GetModuleSize() + 8; ++y)
                 {
-                    for (int x = 0; x < GetModuleSize(); ++x)
+                    for (int x = 0; x < GetModuleSize() + 8; ++x)
                     {
-                        if (_elements[x, y] != null)
+                        if (x < 4 || x >= GetModuleSize() + 4 || y < 4 || y >= GetModuleSize() + 4)
                         {
                             for (int i = 0; i < Scale; ++i)
                             {
                                 for (int j = 0; j < Scale; ++j)
                                 {
-                                    qrBitmap.SetPixel(x * Scale + i, y * Scale + j, _elements[x, y].PixelColor);
+                                    qrBitmap.SetPixel(x * Scale + i, y * Scale + j, Color.White);
                                 }
                             }
                         }
-                        else
+                        else if (_elements[x - 4, y - 4] != null)
                         {
                             for (int i = 0; i < Scale; ++i)
                             {
                                 for (int j = 0; j < Scale; ++j)
                                 {
-                                    qrBitmap.SetPixel(x * Scale + i, y * Scale + j, Color.Blue);
+                                    qrBitmap.SetPixel(x * Scale + i, y * Scale + j, _elements[x - 4, y - 4].PixelColor);
                                 }
                             }
                         }
@@ -201,9 +449,9 @@ namespace Exostasis.QR.Image
         private void WriteBitArray(List<BitArray> structuredArray)
         {
             int x = GetModuleSize() - 1;
-            int y = GetModuleSize() - 1;
-            int listElement = 0;
+            int y = GetModuleSize() - 1;            
             int listIndex = 0;
+            int listElement = structuredArray[listIndex].Count - 1;
             bool goingUp = true;
 
             while (listIndex < structuredArray.Count)
@@ -219,7 +467,17 @@ namespace Exostasis.QR.Image
                     new Module(new Cord(x, y), Color.White, ref _elements);
                 }
                 else if (x == TopLeftFinderPattern.TopRightCord.X + 1 && y >= TopLeftFinderPattern.TopRightCord.Y && 
-                    y <= TopLeftFinderPattern.BottomRightCord.Y + 1)
+                    y < TopLeftFinderPattern.BottomRightCord.Y - 1)
+                {
+                    new Module(new Cord(x, y), Color.White, ref _elements);
+                }
+                else if (x == TopLeftFinderPattern.TopRightCord.X + 1 && y >= TopLeftFinderPattern.TopRightCord.Y - 1 &&
+                    y <= TopLeftFinderPattern.BottomRightCord.Y - 1)
+                {
+                    
+                }
+                else if (x == TopLeftFinderPattern.TopRightCord.X + 1 && y >= TopLeftFinderPattern.BottomRightCord.Y &&
+                    y <= TopLeftFinderPattern.BottomRightCord.Y)
                 {
                     new Module(new Cord(x, y), Color.White, ref _elements);
                 }
@@ -242,14 +500,17 @@ namespace Exostasis.QR.Image
                 {
                     new Module(new Cord(x, y), structuredArray[listIndex][listElement] ? Color.Black : Color.White, ref _elements);
 
-                    if (listElement == structuredArray[listIndex].Count - 1)
+                    if (listElement == 0)
                     {
                         ++listIndex;
-                        listElement = 0;
+                        if (listIndex < structuredArray.Count)
+                        {
+                            listElement = structuredArray[listIndex].Count - 1;
+                        }                        
                     }
                     else
                     {
-                        ++listElement;
+                        --listElement;
                     }
                 }
 
@@ -306,6 +567,21 @@ namespace Exostasis.QR.Image
                     ++x;
                     ++y;
                 }                                
+            }
+
+            int prevY = y;
+            while (x >= 0)
+            {
+                while (y < GetModuleSize())
+                {
+                    if (_elements[x, y] == null)
+                    {
+                        new Module(new Cord(x, y), Color.White, ref _elements);
+                    }
+                    ++y;
+                }
+                --x;
+                y = prevY;
             }
         }
     }

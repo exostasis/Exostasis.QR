@@ -1,4 +1,5 @@
-﻿using Exostasis.Polynomial;
+﻿using System;
+using Exostasis.Polynomial;
 using Exostasis.Polynomial.Extensions;
 using System.Linq;
 
@@ -22,10 +23,17 @@ namespace Exostasis.QR.ErrorCorrection
         public byte[] GenerateErrorCorrectionArray()
         {
             CreateMessageExpression();
+            Console.Write("Message Expression: ");
+            MessageExp.DisplayConstantExpression();
+            Console.Write("\n");
             GenerateErrorCorrectionExpression();
+            Console.Write("Error Correction Expression: ");
+            ErrorCorrectionExp.DisplayConstantExpression();
+            Console.Write("\n");
             MessageExp = MessageExp * new AlphaTerm(0, "x", ErrorCorrectionCodeWordsPerBlock);
 
-            Expression results = MessageExp / ErrorCorrectionExp;
+            Expression results = Expression.LongDivisionXTimes(MessageExp, ErrorCorrectionExp, EncodedArray.Length);
+                       
             var temp = results.GetConstantExpression();
             var bytes = temp.Select(term => term.ToByte());
 

@@ -43,7 +43,7 @@ namespace Exostasis.QR.Generator
             ErrorCorrectionLevel = QrEncoder.ErrorCorrectionLevel;
             QrStructurer = new StructureGenerator(EncodedArray, Version, ErrorCorrectionLevel);
             StructuredArray = QrStructurer.Generate();
-            QrImage = new QrImage(Version, 12, StructuredArray);
+            QrImage = new QrImage(Version, 12, StructuredArray, ErrorCorrectionLevel);
             QrImage.WriteImage(@"C:\Users\exo\Desktop\test.bmp");
         }
 

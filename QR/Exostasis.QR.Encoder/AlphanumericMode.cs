@@ -36,23 +36,18 @@ namespace QREncoder
             {
                 int tempValue;
                 if (i + 1 >= UnencodedString.Length)
-                {
-                    bitArrays.Add(new BitArray(6));
+                {                    
                     tempValue = GetIntValueOfChar(UnencodedString.ElementAt(i));
+                    bitArrays.Add(new BitArray(BitConverter.GetBytes(tempValue)));
+                    bitArrays.Last().Length = 6;
                 }
                 else
                 {
-                    bitArrays.Add(new BitArray(BitsPerBitString));
                     tempValue = GetIntValueOfChar(UnencodedString.ElementAt(i)) * 45 + 
                         GetIntValueOfChar(UnencodedString.ElementAt(i + 1));
-                }
-
-                var tempBytes = BitConverter.GetBytes(tempValue);
-
-                for (int j = 0; j < bitArrays.Last().Count; j++)
-                {
-                    bitArrays.Last().Set(j, (tempBytes[j/8] & (1 << (j % 8))) != 0);
-                }
+                    bitArrays.Add(new BitArray(BitConverter.GetBytes(tempValue)));
+                    bitArrays.Last().Length = BitsPerBitString;
+                }                
             }
 
             return bitArrays;
