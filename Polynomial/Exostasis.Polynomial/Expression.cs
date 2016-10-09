@@ -116,9 +116,6 @@ namespace Exostasis.Polynomial
             {
                 AlphaTerm multiplier = new AlphaTerm(results._terms[0]._exponent, results._terms[0]._variable._variable, results._terms[0]._variable._exponent - divisor._terms[0]._variable._exponent);
                 results = (divisor * multiplier) ^ results;
-                Console.Write($"{i + 1}: ");
-                results.DisplayConstantExpression();
-                Console.Write("\n");
             }
 
             return results;

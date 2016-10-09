@@ -23,13 +23,7 @@ namespace Exostasis.QR.ErrorCorrection
         public byte[] GenerateErrorCorrectionArray()
         {
             CreateMessageExpression();
-            Console.Write("Message Expression: ");
-            MessageExp.DisplayConstantExpression();
-            Console.Write("\n");
             GenerateErrorCorrectionExpression();
-            Console.Write("Error Correction Expression: ");
-            ErrorCorrectionExp.DisplayConstantExpression();
-            Console.Write("\n");
             MessageExp = MessageExp * new AlphaTerm(0, "x", ErrorCorrectionCodeWordsPerBlock);
 
             Expression results = Expression.LongDivisionXTimes(MessageExp, ErrorCorrectionExp, EncodedArray.Length);

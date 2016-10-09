@@ -13,7 +13,7 @@ namespace Exostasis.QR.Generator
     public class QrCode
     {
         private const string NumericModeRegex = "^[0-9]+$";
-        private const string AlphanumericModeRegex = "^[0-9a-z$%*+-./:]+$";
+        private const string AlphanumericModeRegex = "^[0-9a-z$%*+-./: ]+$";
 
         private int Version { get; set; }
 
@@ -33,18 +33,23 @@ namespace Exostasis.QR.Generator
         public QrCode(string unencodedString)
         {
             UnencodedString = unencodedString;
-        }
-
-        public void Generate(int scale = 12)
-        {
             QrEncoder = DataAnalyse();
-            EncodedArray = QrEncoder.DataEncode();
             Version = QrEncoder.Version;
             ErrorCorrectionLevel = QrEncoder.ErrorCorrectionLevel;
+        }
+
+        public void Generate(string filename, int scale = 12)
+        {            
+            EncodedArray = QrEncoder.DataEncode();            
             QrStructurer = new StructureGenerator(EncodedArray, Version, ErrorCorrectionLevel);
             StructuredArray = QrStructurer.Generate();
-            QrImage = new QrImage(Version, 12, StructuredArray, ErrorCorrectionLevel);
-            QrImage.WriteImage(@"C:\Users\exo\Desktop\test.bmp");
+            QrImage = new QrImage(Version, scale, StructuredArray, ErrorCorrectionLevel);
+            QrImage.WriteImage(filename);
+        }
+
+        public int  GetSize()
+        {
+            return Version * 4 + 21;
         }
 
         private EncoderBase DataAnalyse()
