@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Exostasis.QR</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>Exostasis</authors>
+    <owners>Shawn Abtey</owners>
+    <licenseUrl>https://github.com/exostasis/Exostasis.QR/blob/develop/COPYING</licenseUrl>
+    <projectUrl>https://github.com/exostasis/Exostasis.QR</projectUrl>    
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>C# QR Code generator library</description>
+    <releaseNotes>Initial implementation of C# QR Code Generator</releaseNotes>
+    <copyright>Copyright 2016</copyright>
+    <tags>QRCode Exostasis QRGenerator</tags>
+  </metadata>
+</package>

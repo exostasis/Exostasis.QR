@@ -11,6 +11,7 @@ QR code versions 1 - 40 in the following modes
 ##Future Improvements
 1. Nuget Package
 2. Full Asynchronous Implementation
+3. Potentially Kanji support by request
 
 ## Credits
 [Thonky QR Code](http://www.thonky.com/qr-code-tutorial/)
