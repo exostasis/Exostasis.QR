@@ -6,9 +6,11 @@
 Exostasis.QR is distributed using the GNU GPL license view [full license](https://github.com/exostasis/Exostasis.QR/blob/master/COPYING)
 
 ##Features
-   QR code versions 1 - 40 in the following modes  
-1. Numeric Mode (Regex: ^[0-9]+$)  
-2. Alphanumeric Mode (Regex: ^[0-9a-z$%*+-./: ]+$)  
+QR code versions 1 - 40 in the following modes:
+
+
+1. Numeric Mode (Regex: ^[0-9]+$)
+2. Alphanumeric Mode (Regex: ^[0-9a-z$%*+-./: ]+$)
 3. Byte Mode (ISO-8859-1)
 
 ##Future Improvements
