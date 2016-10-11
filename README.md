@@ -6,8 +6,7 @@
 Exostasis.QR is distributed using the GNU GPL license view [full license](https://github.com/exostasis/Exostasis.QR/blob/master/COPYING)
 
 ##NuGet Installation Instructions
-The name of the NuGet package is Exostasis.QR. You can install via searching through NuGet package manager, command line through package 
-manager console, or via the nuget package that exists in this repo
+The name of the NuGet package is **Exostasis.QR**. You can install via searching through **NuGet Package Manager**, command line through **package manager console**, or via the nuget package that exists in this repo under the **nuget** folder
 
 ##Features
 1. QR code versions 1 - 40 in the following modes:
