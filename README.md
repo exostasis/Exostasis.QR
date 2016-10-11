@@ -4,8 +4,8 @@
 
 ##Features
    QR code versions 1 - 40 in the following modes  
-1. Numeric Mode (Regex: ^[0-9]+$)
-2. Alphanumeric Mode (Regex: ^[0-9a-z$%*+-./: ]+$)
+1. Numeric Mode (Regex: ^[0-9]+$)  
+2. Alphanumeric Mode (Regex: ^[0-9a-z$%*+-./: ]+$)  
 3. Byte Mode (ISO-8859-1)
 
 ##Future Improvements
