@@ -14,6 +14,7 @@ Exostasis.QR is distributed using the GNU GPL license view [full license](https:
 ##Future Improvements
 1. Full Asynchronous Implementation
 2. Potentially Kanji support by request
+3. Addition of Test Project to verify changes do not break the code
 
 ## Credits
 [Thonky QR Code](http://www.thonky.com/qr-code-tutorial/)
