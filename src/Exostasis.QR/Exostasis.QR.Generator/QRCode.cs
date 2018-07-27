@@ -17,6 +17,7 @@ using Exostasis.QR.Structurer;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using Exerostasis.QR.Encoder;
@@ -60,13 +61,13 @@ namespace Exostasis.QR.Generator
             QrImage.WriteImage(filename);
         }
         
-        public void GenerateStream(string filename, int scale = 12)
+        public void GenerateStream(MemoryStream stream, int scale = 12)
         {            
             EncodedArray = QrEncoder.DataEncode();            
             QrStructurer = new StructureGenerator(EncodedArray, Version, ErrorCorrectionLevel);
             StructuredArray = QrStructurer.Generate();
             QrImage = new QrImage(Version, scale, StructuredArray, ErrorCorrectionLevel);
-            QrImage.WriteImage(filename);
+            QrImage.WriteStream(stream);
         }
 
         public int  GetSize()
