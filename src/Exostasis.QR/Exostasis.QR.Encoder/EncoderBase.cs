@@ -18,7 +18,7 @@ using System.Linq;
 using Exostasis.QR.Common;
 using Exostasis.QR.Common.Enum;
 
-namespace QREncoder
+namespace Exerostasis.QR.Encoder
 {
     public abstract class EncoderBase
     {
@@ -60,9 +60,9 @@ namespace QREncoder
 
         private int CalculateListBitArrayDataBitCount(List<BitArray> bitArray)
         {
-            int sum = 0;
+            var sum = 0;
 
-            foreach (BitArray tempBitArray in bitArray)
+            foreach (var tempBitArray in bitArray)
             {
                 sum += tempBitArray.Length;
             }
@@ -72,7 +72,7 @@ namespace QREncoder
 
         private void Terminate(List<BitArray> bitArray)
         {
-            int differenceBetweenRequiredVsActual = GetDifferenceBetweenRequiredVsActual(bitArray);
+            var differenceBetweenRequiredVsActual = GetDifferenceBetweenRequiredVsActual(bitArray);
             if (differenceBetweenRequiredVsActual >= 4)
             {
                 bitArray.Add(new BitArray(4));
@@ -85,8 +85,8 @@ namespace QREncoder
 
         private void MakeMultipleOf8(List<BitArray> bitArray)
         {
-            int dataBitCount = CalculateListBitArrayDataBitCount(bitArray);
-            int numberOf0SToAdd = 8 - dataBitCount % 8;
+            var dataBitCount = CalculateListBitArrayDataBitCount(bitArray);
+            var numberOf0SToAdd = 8 - dataBitCount % 8;
 
             if (numberOf0SToAdd > 0)
             {
@@ -97,9 +97,9 @@ namespace QREncoder
         private void Pad(List<BitArray> bitArray)
         {
 
-            int numberOfBytesToAdd = GetDifferenceBetweenRequiredVsActual(bitArray) / 8;
+            var numberOfBytesToAdd = GetDifferenceBetweenRequiredVsActual(bitArray) / 8;
 
-            for(int i = 0; i < numberOfBytesToAdd; ++ i)
+            for(var i = 0; i < numberOfBytesToAdd; ++ i)
             {
                 bitArray.Add(new BitArray(BitConverter.GetBytes(_padBytes[i % 2])));
                 bitArray.Last().Length = 8;
@@ -108,13 +108,13 @@ namespace QREncoder
 
         private byte[] ConvertListBitArrayToByteArray(List<BitArray> bitArray)
         {
-            List <byte> bytes = new List<byte>();
-            int currentSpot = 7;
-            int tempByte = 0;
+            var bytes = new List<byte>();
+            var currentSpot = 7;
+            var tempByte = 0;
 
-            foreach (BitArray array in bitArray)
+            foreach (var array in bitArray)
             {
-                for (int i = array.Count - 1; i >= 0; i--)
+                for (var i = array.Count - 1; i >= 0; i--)
                 {         
                     if (array[i])
                     {
@@ -135,13 +135,13 @@ namespace QREncoder
 
         protected void DetermineMinimumVersionAndMaximumErrorCorrection()
         {
-            int maximumLength = 0;
+            var maximumLength = 0;
 
-            for (int i = (int)ErrorCorrectionLevel.H; i >= 0; --i)
+            for (var i = (int)ErrorCorrectionLevel.H; i >= 0; --i)
             {
                 ErrorCorrectionLevel = (ErrorCorrectionLevel)i;
 
-                for (int j = 0; j < 40; ++j)
+                for (var j = 0; j < 40; ++j)
                 {
                     Version = j;
 

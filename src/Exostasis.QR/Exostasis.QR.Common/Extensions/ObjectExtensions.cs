@@ -20,9 +20,9 @@ namespace Exostasis.QR.Common.Extensions
     {
         public static T DeepCopy<T>(this T objectToCopy)
         {
-            using (MemoryStream memStream = new MemoryStream())
+            using (var memStream = new MemoryStream())
             {
-                BinaryFormatter binaryFomatter = new BinaryFormatter();
+                var binaryFomatter = new BinaryFormatter();
                 binaryFomatter.Serialize(memStream, objectToCopy);
                 memStream.Position = 0;
 

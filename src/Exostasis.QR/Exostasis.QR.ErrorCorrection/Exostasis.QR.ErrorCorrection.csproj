@@ -30,12 +30,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Exostasis.Polynomial">
-      <HintPath>..\..\Polynomial\Exostasis.Polynomial\bin\Exostasis.Polynomial.dll</HintPath>
-    </Reference>
-    <Reference Include="Exostasis.QR.Common">
-      <HintPath>..\Exostasis.QR.Common\bin\Exostasis.QR.Common.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -50,9 +44,17 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Exostasis.QR.Common\Exostasis.QR.Common.csproj">
+      <Project>{582628b9-cd10-4f1d-8c2d-38f5b9433ef5}</Project>
+      <Name>Exostasis.QR.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Exostasis.QR.Encoder\Exostasis.QR.Encoder.csproj">
       <Project>{CEECDF34-BE99-4B14-B420-2928F71B89A8}</Project>
       <Name>Exostasis.QR.Encoder</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Exostasis.QR.Polynomial\Exostasis.QR.Polynomial.csproj">
+      <Project>{ab81bb4e-7a0e-442f-9040-b59c1d5292e9}</Project>
+      <Name>Exostasis.QR.Polynomial</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

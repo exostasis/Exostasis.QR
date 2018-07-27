@@ -11,17 +11,17 @@
  *  You should have received a copy of the GNU General Public License along with Exostasis.QR.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using Exostasis.Polynomial;
-using Exostasis.Polynomial.Extensions;
+using Exostasis.QR.Polynomial;
+using Exostasis.QR.Polynomial.Extensions;
 using System.Linq;
 
 namespace Exostasis.QR.ErrorCorrection
 {
     public class ErrorCorrectionGenerator
     {
-        private byte[] EncodedArray { get; set; }
+        private byte[] EncodedArray { get; }
 
-        private int ErrorCorrectionCodeWordsPerBlock { get; set; }
+        private int ErrorCorrectionCodeWordsPerBlock { get; }
 
         private Expression ErrorCorrectionExp { get; set; }
         private Expression MessageExp { get; set; }
@@ -38,7 +38,7 @@ namespace Exostasis.QR.ErrorCorrection
             GenerateErrorCorrectionExpression();
             MessageExp = MessageExp * new AlphaTerm(0, "x", ErrorCorrectionCodeWordsPerBlock);
 
-            Expression results = Expression.LongDivisionXTimes(MessageExp, ErrorCorrectionExp, EncodedArray.Length);
+            var results = Expression.LongDivisionXTimes(MessageExp, ErrorCorrectionExp, EncodedArray.Length);
                        
             var temp = results.GetConstantExpression();
             var bytes = temp.Select(term => term.ToByte());
@@ -49,7 +49,7 @@ namespace Exostasis.QR.ErrorCorrection
         private void CreateMessageExpression ()
         {
             MessageExp = new Expression();
-            for (int i = 0; i < EncodedArray.Length; ++i)
+            for (var i = 0; i < EncodedArray.Length; ++i)
             {
                 int temp = EncodedArray[i];
                 if (temp != 0)
@@ -61,19 +61,19 @@ namespace Exostasis.QR.ErrorCorrection
 
         private void GenerateErrorCorrectionExpression()
         {
-            Expression startExpression1 = new Expression();
+            var startExpression1 = new Expression();
             startExpression1.AddTerm(new AlphaTerm(0, "x", 1));
             startExpression1.AddTerm(new AlphaTerm(0, "x", 0));
 
-            Expression startExpression2 = new Expression();
+            var startExpression2 = new Expression();
             startExpression2.AddTerm(new AlphaTerm(0, "x", 1));
             startExpression2.AddTerm(new AlphaTerm(1, "x", 0));
 
-            Expression results = startExpression1 * startExpression2;
+            var results = startExpression1 * startExpression2;
             
-            for (int i = 2; i < ErrorCorrectionCodeWordsPerBlock; ++ i)
+            for (var i = 2; i < ErrorCorrectionCodeWordsPerBlock; ++ i)
             {
-                Expression tempExp = new Expression();
+                var tempExp = new Expression();
                 tempExp.AddTerm(new AlphaTerm(0, "x", 1));
                 tempExp.AddTerm(new AlphaTerm(i, "x", 0));
 

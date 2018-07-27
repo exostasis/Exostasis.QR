@@ -17,7 +17,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace QREncoder
+namespace Exerostasis.QR.Encoder
 {
     public class ByteMode : EncoderBase
     {
@@ -56,12 +56,12 @@ namespace QREncoder
 
         protected override List<BitArray> Encode()
         {
-            List<BitArray> bitArrays = new List<BitArray>();
+            var bitArrays = new List<BitArray>();
 
             bitArrays.Add(ModeIndicator);
             bitArrays.Add(new BitArray(CharacterCountIndicator));
 
-            for (int i = 0; i < UnencodedString.Length; ++i)
+            for (var i = 0; i < UnencodedString.Length; ++i)
             {
                 var temp = Encoding.GetEncoding("ISO-8859-1").GetBytes(UnencodedString.ToCharArray(), i, 1);
                 bitArrays.Add(new BitArray(temp));

@@ -7,8 +7,8 @@
     <ProjectGuid>{CEECDF34-BE99-4B14-B420-2928F71B89A8}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>QREncoder</RootNamespace>
-    <AssemblyName>QREncoder</AssemblyName>
+    <RootNamespace>Exerostasis.QR.Encoder</RootNamespace>
+    <AssemblyName>Exerostasis.QR.Encoder</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />

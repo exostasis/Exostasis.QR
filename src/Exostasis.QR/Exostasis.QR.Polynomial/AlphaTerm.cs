@@ -1,12 +1,12 @@
-﻿using Exostasis.Polynomial.Extensions;
-using System;
+﻿using System;
+using Exostasis.QR.Polynomial.Extensions;
 
-namespace Exostasis.Polynomial
+namespace Exostasis.QR.Polynomial
 {
     public class AlphaTerm : Object
     {
-        public int _exponent { get; private set; }
-        public Variable _variable { get; private set; }
+        public int _exponent { get; }
+        public Variable _variable { get; }
 
         public AlphaTerm (int exponent)
         {
@@ -47,7 +47,7 @@ namespace Exostasis.Polynomial
 
         public static AlphaTerm operator+ (AlphaTerm a1, AlphaTerm a2)
         {
-            int temp = (a1.AntiLog() ^ a2.AntiLog());
+            var temp = (a1.AntiLog() ^ a2.AntiLog());
 
             if (temp != 0)
             {
@@ -69,7 +69,7 @@ namespace Exostasis.Polynomial
                 return false;
             }
 
-            AlphaTerm a1 = obj as AlphaTerm;
+            var a1 = obj as AlphaTerm;
             if (a1 == null)
             {
                 return false;

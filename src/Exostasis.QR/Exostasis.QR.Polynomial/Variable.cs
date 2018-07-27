@@ -1,11 +1,11 @@
 ﻿using System;
 
-namespace Exostasis.Polynomial
+namespace Exostasis.QR.Polynomial
 {
     public class Variable : Object
     {
-        public int _exponent { get; private set; }
-        public string _variable { get; private set; }
+        public int _exponent { get; }
+        public string _variable { get; }
 
         public Variable (string variable)
         {
@@ -41,7 +41,7 @@ namespace Exostasis.Polynomial
                 return false;
             }
 
-            Variable v1 = obj as Variable;
+            var v1 = obj as Variable;
             if (v1 == null)
             {
                 return false;
