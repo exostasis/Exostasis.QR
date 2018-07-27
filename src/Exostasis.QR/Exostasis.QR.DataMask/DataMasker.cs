@@ -26,11 +26,11 @@ namespace Exostasis.QR.DataMask
 
         public Module[,] MaskedImage { get; private set; }
 
-        private int Version { get; set; }
-        private int Size { get; set; }
+        private int Version { get; }
+        private int Size { get; }
 
-        private List<Element> ExcludedElements { get; set; }
-        private Module[,] Image { get; set; }
+        private List<Element> ExcludedElements { get; }
+        private Module[,] Image { get; }
 
         public DataMasker(int version, List<Element> excludedElements, Module[,] image, int size)
         {
@@ -45,12 +45,12 @@ namespace Exostasis.QR.DataMask
             Module[,] tempImage;
 
             tempImage = TryDataMask1(Image);
-            int lowestPenaltyPoints = CalculatePenalty(tempImage);
+            var lowestPenaltyPoints = CalculatePenalty(tempImage);
             MaskedImage = tempImage;
             MaskVerion = 0;
 
             tempImage = TryDataMask2(Image);
-            int penaltyPoints = CalculatePenalty(tempImage);
+            var penaltyPoints = CalculatePenalty(tempImage);
             if (penaltyPoints < lowestPenaltyPoints)
             {
                 MaskedImage = tempImage;
@@ -116,9 +116,9 @@ namespace Exostasis.QR.DataMask
         {
             var outImage = inputImage.DeepCopy();
 
-            for (int y = 0; y < Size; ++y)
+            for (var y = 0; y < Size; ++y)
             {
-                for (int x = 0; x < Size; ++x)
+                for (var x = 0; x < Size; ++x)
                 {
                     if ((x + y)%2 == 0 && !IsExcludedRegion(x, y))
                     {
@@ -134,9 +134,9 @@ namespace Exostasis.QR.DataMask
         {
             var outImage = inputImage.DeepCopy();
 
-            for (int y = 0; y < Size; ++y)
+            for (var y = 0; y < Size; ++y)
             {
-                for (int x = 0; x < Size; ++x)
+                for (var x = 0; x < Size; ++x)
                 {
                     if (y%2 == 0 && !IsExcludedRegion(x, y))
                     {
@@ -152,9 +152,9 @@ namespace Exostasis.QR.DataMask
         {
             var outImage = inputImage.DeepCopy();
 
-            for (int y = 0; y < Size; ++y)
+            for (var y = 0; y < Size; ++y)
             {
-                for (int x = 0; x < Size; ++x)
+                for (var x = 0; x < Size; ++x)
                 {
                     if (x%3 == 0 && !IsExcludedRegion(x, y))
                     {
@@ -170,9 +170,9 @@ namespace Exostasis.QR.DataMask
         {
             var outImage = inputImage.DeepCopy();
 
-            for (int y = 0; y < Size; ++y)
+            for (var y = 0; y < Size; ++y)
             {
-                for (int x = 0; x < Size; ++x)
+                for (var x = 0; x < Size; ++x)
                 {
                     if ((x + y)%3 == 0 && !IsExcludedRegion(x, y))
                     {
@@ -188,9 +188,9 @@ namespace Exostasis.QR.DataMask
         {
             var outImage = inputImage.DeepCopy();
 
-            for (int y = 0; y < Size; ++y)
+            for (var y = 0; y < Size; ++y)
             {
-                for (int x = 0; x < Size; ++x)
+                for (var x = 0; x < Size; ++x)
                 {
                     if ((Math.Floor((decimal) y/2) + Math.Floor((decimal) x/3))%2 == 0 && !IsExcludedRegion(x, y))
                     {
@@ -206,9 +206,9 @@ namespace Exostasis.QR.DataMask
         {
             var outImage = inputImage.DeepCopy();
 
-            for (int y = 0; y < Size; ++y)
+            for (var y = 0; y < Size; ++y)
             {
-                for (int x = 0; x < Size; ++x)
+                for (var x = 0; x < Size; ++x)
                 {
                     if (x * y % 2 + x * y % 3 == 0 && !IsExcludedRegion(x, y))
                     {
@@ -224,9 +224,9 @@ namespace Exostasis.QR.DataMask
         {
             var outImage = inputImage.DeepCopy();
 
-            for (int y = 0; y < Size; ++y)
+            for (var y = 0; y < Size; ++y)
             {
-                for (int x = 0; x < Size; ++x)
+                for (var x = 0; x < Size; ++x)
                 {
                     if ((x*y%2 + x*y%3)%2 == 0 && !IsExcludedRegion(x, y))
                     {
@@ -242,9 +242,9 @@ namespace Exostasis.QR.DataMask
         {
             var outImage = inputImage.DeepCopy();
 
-            for (int y = 0; y < Size; ++y)
+            for (var y = 0; y < Size; ++y)
             {
-                for (int x = 0; x < Size; ++x)
+                for (var x = 0; x < Size; ++x)
                 {
                     if (((x + y)%2 + x*y%3)%2 == 0 && !IsExcludedRegion(x, y))
                     {
@@ -263,7 +263,7 @@ namespace Exostasis.QR.DataMask
 
         private int CalculatePenalty(Module[,] image)
         {
-            int penalty = 0;
+            var penalty = 0;
 
             penalty += CalculateRule1(image);
             penalty += CalculateRule2(image);
@@ -275,13 +275,13 @@ namespace Exostasis.QR.DataMask
 
         private int CalculateRule1(Module[,] image)
         {
-            int penalty = 0;
-            int consecutiveColorCount = 0;
+            var penalty = 0;
+            var consecutiveColorCount = 0;
             Color previousColor = Color.Red;
 
-            for (int y = 0; y < Size; ++y)
+            for (var y = 0; y < Size; ++y)
             {
-                for (int x = 0; x < Size; ++x)
+                for (var x = 0; x < Size; ++x)
                 {
                     if (x == 0)
                     {
@@ -311,9 +311,9 @@ namespace Exostasis.QR.DataMask
                 previousColor = Color.Red;
             }
 
-            for (int x = 0; x < Size; ++x)
+            for (var x = 0; x < Size; ++x)
             {
-                for (int y = 0; y < Size; ++y)
+                for (var y = 0; y < Size; ++y)
                 {
                     if (y == 0)
                     {
@@ -350,9 +350,9 @@ namespace Exostasis.QR.DataMask
         {
             var penalty = 0;
 
-            for (int y = 0; y < Size - 1; ++y)
+            for (var y = 0; y < Size - 1; ++y)
             {
-                for (int x = 0; x < Size - 1; ++x)
+                for (var x = 0; x < Size - 1; ++x)
                 {
                     if (image[x, y].PixelColor == image[x + 1, y].PixelColor &&
                         image[x, y].PixelColor == image[x, y + 1].PixelColor &&
@@ -370,9 +370,9 @@ namespace Exostasis.QR.DataMask
         {
             var penalty = 0;
 
-            for (int y = 0; y < Size - 11; ++y)
+            for (var y = 0; y < Size - 11; ++y)
             {
-                for (int x = 0; x < Size - 11; ++x)
+                for (var x = 0; x < Size - 11; ++x)
                 {
                     if (image[x, y].PixelColor == Color.Black && image[x + 1, y].PixelColor == Color.White &&
                         image[x + 2, y].PixelColor == Color.Black && image[x + 3, y].PixelColor == Color.Black &&
@@ -418,12 +418,12 @@ namespace Exostasis.QR.DataMask
 
         private int CalculateRule4(Module[,] image)
         {
-            int numModules = Size*Size;
-            int countBlackModule = 0;
+            var numModules = Size*Size;
+            var countBlackModule = 0;
 
-            for (int y = 0; y < Size; ++y)
+            for (var y = 0; y < Size; ++y)
             {
-                for (int x = 0; x < Size; ++x)
+                for (var x = 0; x < Size; ++x)
                 {
                     if (image[x, y].PixelColor == Color.Black)
                     {
@@ -432,7 +432,7 @@ namespace Exostasis.QR.DataMask
                 }
             }
 
-            int percentage = (int) ((double) countBlackModule / numModules * 100);
+            var percentage = (int) ((double) countBlackModule / numModules * 100);
 
             var lowerMultiple = percentage - percentage % 5;
             var upperMultiple = percentage + (5 - percentage % 5);

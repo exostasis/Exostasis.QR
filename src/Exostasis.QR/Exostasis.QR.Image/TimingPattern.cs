@@ -30,9 +30,9 @@ namespace Exostasis.QR.Image
 
         private void WriteModules(ref Module[,] elements)
         {
-            for (int y = TopLeftCord.Y; y < BottomLeftCord.Y; ++y)
+            for (var y = TopLeftCord.Y; y < BottomLeftCord.Y; ++y)
             {
-                for (int x = TopLeftCord.X; x < TopRightCord.X; ++x)
+                for (var x = TopLeftCord.X; x < TopRightCord.X; ++x)
                 {                    
                     new Module(new Cord(x, y), x % 2 == 0 && y  % 2 == 0 ? Color.Black : Color.White, ref elements);
                 }

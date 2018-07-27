@@ -19,7 +19,7 @@ namespace Exostasis.QR.Common.Extensions
     {
         public static T[] SubArray<T>(this T[] source, int start, int length)
         {
-            T[] destination = new T[length];
+            var destination = new T[length];
 
             if (source == null)
             {

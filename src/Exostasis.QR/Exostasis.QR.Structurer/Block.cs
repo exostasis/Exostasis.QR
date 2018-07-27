@@ -17,8 +17,8 @@ namespace Exostasis.QR.Structurer
 {
     public class Block
     {
-        public List<byte> CodeWords { get; private set; }
-        public List<byte> EcWords { get; private set; }
+        public List<byte> CodeWords { get; }
+        public List<byte> EcWords { get; }
 
         public Block (byte[] codeWords, byte[] ecWords)
         {

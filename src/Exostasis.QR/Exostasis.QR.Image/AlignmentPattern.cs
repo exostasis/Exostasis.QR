@@ -34,9 +34,9 @@ namespace Exostasis.QR.Image
 
         private void WriteModules(ref Module[,] elements)
         {            
-            for (int y = 0; y < ModulesHeigh; ++y)
+            for (var y = 0; y < ModulesHeigh; ++y)
             {
-                for (int x = 0; x < ModulesWide; ++x)
+                for (var x = 0; x < ModulesWide; ++x)
                 {
                     if (x == 0 || y == 0 || x == 4 || y == 4)
                     {

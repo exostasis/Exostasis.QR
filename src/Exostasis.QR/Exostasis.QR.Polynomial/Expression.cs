@@ -1,9 +1,9 @@
-﻿using Exostasis.Polynomial.Extensions;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Exostasis.QR.Polynomial.Extensions;
 
-namespace Exostasis.Polynomial
+namespace Exostasis.QR.Polynomial
 {
     public class Expression
     {
@@ -16,7 +16,7 @@ namespace Exostasis.Polynomial
 
         public Expression (Expression e1) : this()
         {
-            for (int i = 0; i < e1._terms.Count; ++i)
+            for (var i = 0; i < e1._terms.Count; ++i)
             {
                 _terms.Add(new AlphaTerm(e1._terms[i]));
             }
@@ -36,9 +36,9 @@ namespace Exostasis.Polynomial
 
         public List<ConstantTerm> GetConstantExpression ()
         {
-            int prevExponent = _terms[0]._variable._exponent + 1;
-            List<ConstantTerm> expression = new List<ConstantTerm>();
-            foreach (AlphaTerm a in _terms)
+            var prevExponent = _terms[0]._variable._exponent + 1;
+            var expression = new List<ConstantTerm>();
+            foreach (var a in _terms)
             {
                 if (a._variable._exponent != prevExponent - 1)
                 {
@@ -53,9 +53,9 @@ namespace Exostasis.Polynomial
 
         public void Reduce()
         {
-            for (int i = 0; i < _terms.Count; ++i)
+            for (var i = 0; i < _terms.Count; ++i)
             {
-                for (int j = i + 1; j < _terms.Count; ++j)
+                for (var j = i + 1; j < _terms.Count; ++j)
                 {
                     if (_terms[i].EqualVariables(_terms[j]))
                     {
@@ -74,8 +74,8 @@ namespace Exostasis.Polynomial
 
         public static Expression operator* (Expression e1, AlphaTerm a1)
         {
-            Expression result = new Expression();
-            foreach (AlphaTerm a2 in e1._terms)
+            var result = new Expression();
+            foreach (var a2 in e1._terms)
             {              
                 result.AddTerm(a1 * a2);
             }
@@ -85,10 +85,10 @@ namespace Exostasis.Polynomial
 
         public static Expression operator* (Expression e1, Expression e2)
         {
-            Expression result = new Expression();
-            foreach (AlphaTerm a1 in e1._terms)
+            var result = new Expression();
+            foreach (var a1 in e1._terms)
             {
-                foreach (AlphaTerm a2 in e2._terms)
+                foreach (var a2 in e2._terms)
                 {
                     result.AddTerm(a1 * a2);
                 }
@@ -99,10 +99,10 @@ namespace Exostasis.Polynomial
 
         public static Expression operator/ (Expression dividen, Expression divisor)
         {
-            Expression results = new Expression(dividen);
-            for (int i = 0; i < dividen._terms.Count; ++i)
+            var results = new Expression(dividen);
+            for (var i = 0; i < dividen._terms.Count; ++i)
             {
-                AlphaTerm multiplier = new AlphaTerm(results._terms[0]._exponent, results._terms[0]._variable._variable, results._terms[0]._variable._exponent - divisor._terms[0]._variable._exponent);
+                var multiplier = new AlphaTerm(results._terms[0]._exponent, results._terms[0]._variable._variable, results._terms[0]._variable._exponent - divisor._terms[0]._variable._exponent);
                 results = (divisor * multiplier) ^ results;
             }
 
@@ -111,10 +111,10 @@ namespace Exostasis.Polynomial
 
         public static Expression LongDivisionXTimes(Expression dividen, Expression divisor, int times)
         {
-            Expression results = new Expression(dividen);
-            for (int i = 0; i < times; ++i)
+            var results = new Expression(dividen);
+            for (var i = 0; i < times; ++i)
             {
-                AlphaTerm multiplier = new AlphaTerm(results._terms[0]._exponent, results._terms[0]._variable._variable, results._terms[0]._variable._exponent - divisor._terms[0]._variable._exponent);
+                var multiplier = new AlphaTerm(results._terms[0]._exponent, results._terms[0]._variable._variable, results._terms[0]._variable._exponent - divisor._terms[0]._variable._exponent);
                 results = (divisor * multiplier) ^ results;
             }
 
@@ -123,10 +123,10 @@ namespace Exostasis.Polynomial
 
         public static Expression operator^ (Expression e1, Expression e2)
         {
-            Expression results = new Expression();
+            var results = new Expression();
 
-            int e1Index = 0;
-            int e2Index = 0;
+            var e1Index = 0;
+            var e2Index = 0;
 
             while (e1Index < e1._terms.Count && e2Index < e2._terms.Count)
             {
@@ -142,7 +142,7 @@ namespace Exostasis.Polynomial
 
             if (e1Index != e1._terms.Count)
             {
-                for (int i = e1Index; i < e1._terms.Count; ++ i)
+                for (var i = e1Index; i < e1._terms.Count; ++ i)
                 {
                     results.AddTerm(e1._terms[i]);
                 }
@@ -150,7 +150,7 @@ namespace Exostasis.Polynomial
             
             if (e2Index != e2._terms.Count)
             {
-                for (int i = e2Index; i < e2._terms.Count; ++i)
+                for (var i = e2Index; i < e2._terms.Count; ++i)
                 {
                     results.AddTerm(e2._terms[i]);
                 }
@@ -161,7 +161,7 @@ namespace Exostasis.Polynomial
 
         public void DisplayExpression()
         {
-            foreach(AlphaTerm a in _terms)
+            foreach(var a in _terms)
             {
                 a.DisplayAlphaTerm();
                 if (a != _terms[_terms.Count - 1])
@@ -173,7 +173,7 @@ namespace Exostasis.Polynomial
 
         public void DisplayConstantExpression()
         {
-            foreach (AlphaTerm a in _terms)
+            foreach (var a in _terms)
             {
                 Console.Write($"{a.AntiLog()}");
                 a._variable.DisplayVariable();

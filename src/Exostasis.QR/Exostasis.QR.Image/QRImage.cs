@@ -16,6 +16,8 @@ using System.Collections;
 using System.Collections.Generic;
 using Exostasis.QR.Common.Image;
 using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 using Exostasis.QR.Common;
 using Exostasis.QR.Common.Enum;
 using Exostasis.QR.DataMask;
@@ -61,13 +63,13 @@ namespace Exostasis.QR.Image
 
         private void AddAlignmentPatterns()
         {
-            List<Cord> possibleCords = CalculateAlignmentPatternCords();
+            var possibleCords = CalculateAlignmentPatternCords();
 
             possibleCords.ForEach(cord =>
             {
-                for (int y = 0; y < AlignmentPattern.ModulesHeigh; ++y)
+                for (var y = 0; y < AlignmentPattern.ModulesHeigh; ++y)
                 {
-                    for (int x = 0; x < AlignmentPattern.ModulesWide; ++x)
+                    for (var x = 0; x < AlignmentPattern.ModulesWide; ++x)
                     {
                         if (_elements[cord.X - AlignmentPattern.ModulesWide / 2 + x, cord.Y - AlignmentPattern.ModulesHeigh / 2 + y] 
                             != null)
@@ -132,14 +134,14 @@ namespace Exostasis.QR.Image
 
         private List<Cord> CalculateAlignmentPatternCords()
         {
-            List<Cord> cords = new List<Cord>();
-            int[] possibleCords = Constants.AlignmentCords[Version]?.Values;
+            var cords = new List<Cord>();
+            var possibleCords = Constants.AlignmentCords[Version]?.Values;
 
             if (possibleCords != null)
             {
-                for (int i = 0; i < possibleCords.Length; ++i)
+                for (var i = 0; i < possibleCords.Length; ++i)
                 {
-                    for (int j = i; j < possibleCords.Length; ++j)
+                    for (var j = i; j < possibleCords.Length; ++j)
                     {
                         cords.Add(new Cord(possibleCords[i], possibleCords[j]));
                         if (possibleCords[i] != possibleCords[j])
@@ -160,7 +162,7 @@ namespace Exostasis.QR.Image
 
         private void WriteFormatStringAndVersionInformation(int maskVersion)
         {
-            int errorCorrectionValue = 0;
+            var errorCorrectionValue = 0;
 
             if (ErrorCorrectionLevel == ErrorCorrectionLevel.H)
             {
@@ -175,8 +177,8 @@ namespace Exostasis.QR.Image
                 errorCorrectionValue = 3;
             }
 
-            BitArray formatBits = new BitArray(BitConverter.GetBytes((errorCorrectionValue << 13) + (maskVersion << 10)));
-            for (int i = formatBits.Count - 1; i >= 0; --i)
+            var formatBits = new BitArray(BitConverter.GetBytes((errorCorrectionValue << 13) + (maskVersion << 10)));
+            for (var i = formatBits.Count - 1; i >= 0; --i)
             {
                 if (!formatBits[i])
                 {
@@ -188,16 +190,16 @@ namespace Exostasis.QR.Image
                 }
             }
 
-            int countBits = formatBits.Count;
+            var countBits = formatBits.Count;
             var errorCorrection = new BitArray(formatBits);
             while (countBits > 10)
             {
-                BitArray generatorBits = new BitArray(BitConverter.GetBytes(1335 << (countBits - 11)));
+                var generatorBits = new BitArray(BitConverter.GetBytes(1335 << (countBits - 11)));
                 generatorBits.Length = countBits;
 
                 errorCorrection = errorCorrection.Xor(generatorBits);
 
-                for (int i = errorCorrection.Count - 1; i >= 0; --i)
+                for (var i = errorCorrection.Count - 1; i >= 0; --i)
                 {
                     if (errorCorrection[i])
                     {
@@ -212,7 +214,7 @@ namespace Exostasis.QR.Image
 
             var informationString = new BitArray(15);
 
-            for (int i = formatBits.Count - 1; i >= 0; --i)
+            for (var i = formatBits.Count - 1; i >= 0; --i)
             {
                 if (i > 14 - 5)
                 {
@@ -228,7 +230,7 @@ namespace Exostasis.QR.Image
             maskString.Length = 15;
             informationString = informationString.Xor(maskString);
 
-            for (int i = 0; i < informationString.Count; ++i)
+            for (var i = 0; i < informationString.Count; ++i)
             {                
                 switch (i)
                 {
@@ -295,8 +297,8 @@ namespace Exostasis.QR.Image
                 }
             }
 
-            BitArray versionBits = new BitArray(BitConverter.GetBytes((Version + 1) << 12));
-            for (int i = versionBits.Count - 1; i >= 0; --i)
+            var versionBits = new BitArray(BitConverter.GetBytes((Version + 1) << 12));
+            for (var i = versionBits.Count - 1; i >= 0; --i)
             {
                 if (!versionBits[i])
                 {
@@ -312,12 +314,12 @@ namespace Exostasis.QR.Image
             errorCorrection = new BitArray(versionBits);
             while (countBits > 12)
             {
-                BitArray generatorBits = new BitArray(BitConverter.GetBytes(7973 << (countBits - 13)));
+                var generatorBits = new BitArray(BitConverter.GetBytes(7973 << (countBits - 13)));
                 generatorBits.Length = countBits;
 
                 errorCorrection = errorCorrection.Xor(generatorBits);
 
-                for (int i = errorCorrection.Count - 1; i >= 0; --i)
+                for (var i = errorCorrection.Count - 1; i >= 0; --i)
                 {
                     if (errorCorrection[i])
                     {
@@ -332,7 +334,7 @@ namespace Exostasis.QR.Image
 
             informationString = new BitArray(18);
 
-            for (int i = versionBits.Count - 1; i >= 0; --i)
+            for (var i = versionBits.Count - 1; i >= 0; --i)
             {
                 if (i > 17 - 6)
                 {
@@ -344,7 +346,7 @@ namespace Exostasis.QR.Image
                 }
             }
 
-            for (int i = 0; i < informationString.Count; ++i)
+            for (var i = 0; i < informationString.Count; ++i)
             {
                 switch (i)
                 {
@@ -428,15 +430,15 @@ namespace Exostasis.QR.Image
         {
             using (var qrBitmap = new Bitmap((GetModuleSize() + 8) * Scale, (GetModuleSize() + 8) * Scale))
             {
-                for (int y = 0; y < GetModuleSize() + 8; ++y)
+                for (var y = 0; y < GetModuleSize() + 8; ++y)
                 {
-                    for (int x = 0; x < GetModuleSize() + 8; ++x)
+                    for (var x = 0; x < GetModuleSize() + 8; ++x)
                     {
                         if (x < 4 || x >= GetModuleSize() + 4 || y < 4 || y >= GetModuleSize() + 4)
                         {
-                            for (int i = 0; i < Scale; ++i)
+                            for (var i = 0; i < Scale; ++i)
                             {
-                                for (int j = 0; j < Scale; ++j)
+                                for (var j = 0; j < Scale; ++j)
                                 {
                                     qrBitmap.SetPixel(x * Scale + i, y * Scale + j, Color.White);
                                 }
@@ -444,9 +446,9 @@ namespace Exostasis.QR.Image
                         }
                         else if (_elements[x - 4, y - 4] != null)
                         {
-                            for (int i = 0; i < Scale; ++i)
+                            for (var i = 0; i < Scale; ++i)
                             {
-                                for (int j = 0; j < Scale; ++j)
+                                for (var j = 0; j < Scale; ++j)
                                 {
                                     qrBitmap.SetPixel(x * Scale + i, y * Scale + j, _elements[x - 4, y - 4].PixelColor);
                                 }
@@ -457,14 +459,49 @@ namespace Exostasis.QR.Image
                 qrBitmap.Save(filename);
             }
         }
+        
+        public void WriteStream(MemoryStream stream)
+        {
+            using (var qrBitmap = new Bitmap((GetModuleSize() + 8) * Scale, (GetModuleSize() + 8) * Scale))
+            {
+                for (var y = 0; y < GetModuleSize() + 8; ++y)
+                {
+                    for (var x = 0; x < GetModuleSize() + 8; ++x)
+                    {
+                        if (x < 4 || x >= GetModuleSize() + 4 || y < 4 || y >= GetModuleSize() + 4)
+                        {
+                            for (var i = 0; i < Scale; ++i)
+                            {
+                                for (var j = 0; j < Scale; ++j)
+                                {
+                                    qrBitmap.SetPixel(x * Scale + i, y * Scale + j, Color.White);
+                                }
+                            }
+                        }
+                        else if (_elements[x - 4, y - 4] != null)
+                        {
+                            for (var i = 0; i < Scale; ++i)
+                            {
+                                for (var j = 0; j < Scale; ++j)
+                                {
+                                    qrBitmap.SetPixel(x * Scale + i, y * Scale + j, _elements[x - 4, y - 4].PixelColor);
+                                }
+                            }
+                        }
+                    }
+                }
+                
+                qrBitmap.Save(stream, ImageFormat.Bmp);
+            }
+        }
 
         private void WriteBitArray(List<BitArray> structuredArray)
         {
-            int x = GetModuleSize() - 1;
-            int y = GetModuleSize() - 1;            
-            int listIndex = 0;
-            int listElement = structuredArray[listIndex].Count - 1;
-            bool goingUp = true;
+            var x = GetModuleSize() - 1;
+            var y = GetModuleSize() - 1;            
+            var listIndex = 0;
+            var listElement = structuredArray[listIndex].Count - 1;
+            var goingUp = true;
 
             while (listIndex < structuredArray.Count)
             {
@@ -581,7 +618,7 @@ namespace Exostasis.QR.Image
                 }                                
             }
 
-            int prevY = y;
+            var prevY = y;
             while (x >= 0)
             {
                 while (y < GetModuleSize())

@@ -18,8 +18,8 @@ namespace Exostasis.QR.Common.Image
     [Serializable]
     public class Cord
     {
-        public int X { get; private set; }
-        public int Y { get; private set; }
+        public int X { get; }
+        public int Y { get; }
 
         public Cord(int x, int y)
         {

@@ -7,10 +7,11 @@
     <ProjectGuid>{AB81BB4E-7A0E-442F-9040-B59C1D5292E9}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Exostasis.Polynomial</RootNamespace>
-    <AssemblyName>Exostasis.Polynomial</AssemblyName>
+    <RootNamespace>Exostasis.QR.Polynomial</RootNamespace>
+    <AssemblyName>Exostasis.QR.Polynomial</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <LangVersion>default</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>

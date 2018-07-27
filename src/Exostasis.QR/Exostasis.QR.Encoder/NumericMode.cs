@@ -16,7 +16,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace QREncoder
+namespace Exerostasis.QR.Encoder
 {
     public class NumericMode : EncoderBase
     {
@@ -55,14 +55,14 @@ namespace QREncoder
 
         protected override List<BitArray> Encode()
         {
-            List<BitArray> bitArrays = new List<BitArray>();
+            var bitArrays = new List<BitArray>();
 
             bitArrays.Add(ModeIndicator);
             bitArrays.Add(new BitArray(CharacterCountIndicator));
 
-            for (int i = 0; i < UnencodedString.Length; i +=3)
+            for (var i = 0; i < UnencodedString.Length; i +=3)
             {
-                int charsLeftToCopy = UnencodedString.Length - i;
+                var charsLeftToCopy = UnencodedString.Length - i;
                 var tempValue = int.Parse(UnencodedString.Substring(i, charsLeftToCopy >= 3 ? 3 : charsLeftToCopy));
 
                 bitArrays.Add(new BitArray(BitConverter.GetBytes(tempValue)));

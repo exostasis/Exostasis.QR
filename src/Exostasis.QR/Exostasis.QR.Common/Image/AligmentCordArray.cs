@@ -15,7 +15,7 @@ namespace Exostasis.QR.Common.Image
 {
     public class AlignmentCordArray
     {
-        public int[] Values { get; private set; }
+        public int[] Values { get; }
 
         public AlignmentCordArray(params int[] values)
         {

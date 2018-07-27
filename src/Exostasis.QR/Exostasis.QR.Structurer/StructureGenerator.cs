@@ -23,21 +23,21 @@ namespace Exostasis.QR.Structurer
 {
     public class StructureGenerator
     {
-        private int Version { get; set; }
-        private int BlocksInGroup1 { get; set; }
-        private int BlocksInGroup2 { get; set; }
-        private int CodeWordsPerBlockGroup1 { get; set; }
-        private int CodeWordsPerBlockGroup2 { get; set; }
-        private int RequiredRemainder { get; set; }
-        private int RequiredECwords { get; set; }
+        private int Version { get; }
+        private int BlocksInGroup1 { get; }
+        private int BlocksInGroup2 { get; }
+        private int CodeWordsPerBlockGroup1 { get; }
+        private int CodeWordsPerBlockGroup2 { get; }
+        private int RequiredRemainder { get; }
+        private int RequiredECwords { get; }
 
-        private byte[] EncodedArray { get; set; }
+        private byte[] EncodedArray { get; }
 
-        private ErrorCorrectionLevel ErrorCorrectionLevel { get; set; }
+        private ErrorCorrectionLevel ErrorCorrectionLevel { get; }
 
         private List<BitArray> IntelevedBlockArray { get; set; }
 
-        private List<Group> Groups { get; set; }
+        private List<Group> Groups { get; }
 
         private ErrorCorrectionGenerator QrErrorGenerator { get; set; }
 
@@ -67,11 +67,11 @@ namespace Exostasis.QR.Structurer
 
         private void BuildGroups ()
         {
-            int spotInEncodedArray = 0;
+            var spotInEncodedArray = 0;
 
             Groups.Add(new Group());
 
-            for (int i = 0; i < BlocksInGroup1; ++i)
+            for (var i = 0; i < BlocksInGroup1; ++i)
             {
                 BuildBlock(EncodedArray.SubArray(spotInEncodedArray, CodeWordsPerBlockGroup1));
                 spotInEncodedArray += CodeWordsPerBlockGroup1;
@@ -80,7 +80,7 @@ namespace Exostasis.QR.Structurer
             if (BlocksInGroup2 != 0)
             {
                 Groups.Add(new Group());
-                for (int i = 0; i < BlocksInGroup2; ++i)
+                for (var i = 0; i < BlocksInGroup2; ++i)
                 {
                     BuildBlock(EncodedArray.SubArray(spotInEncodedArray, CodeWordsPerBlockGroup2));
                     spotInEncodedArray += CodeWordsPerBlockGroup2;
@@ -97,14 +97,14 @@ namespace Exostasis.QR.Structurer
 
         private void Interleve ()
         {
-            List<byte> tempBytes = new List<byte>();
-            int maxCodeWords = CodeWordsPerBlockGroup1 > CodeWordsPerBlockGroup2 ? CodeWordsPerBlockGroup1 : CodeWordsPerBlockGroup2;
+            var tempBytes = new List<byte>();
+            var maxCodeWords = CodeWordsPerBlockGroup1 > CodeWordsPerBlockGroup2 ? CodeWordsPerBlockGroup1 : CodeWordsPerBlockGroup2;
             
-            for (int i = 0; i < maxCodeWords; ++i)
+            for (var i = 0; i < maxCodeWords; ++i)
             {
-                for (int j = 0; j < Groups.Count; ++j)
+                for (var j = 0; j < Groups.Count; ++j)
                 {
-                    for (int k = 0; k < Groups.ElementAt(j).Blocks.Count; ++k)
+                    for (var k = 0; k < Groups.ElementAt(j).Blocks.Count; ++k)
                     {
                         if (i < Groups.ElementAt(j).Blocks.ElementAt(k).CodeWords.Count)
                         {
@@ -116,11 +116,11 @@ namespace Exostasis.QR.Structurer
                 }               
             }
 
-            for (int i = 0; i < RequiredECwords; ++i)
+            for (var i = 0; i < RequiredECwords; ++i)
             {
-                for (int j = 0; j < Groups.Count; ++j)
+                for (var j = 0; j < Groups.Count; ++j)
                 {
-                    for (int k = 0; k < Groups.ElementAt(j).Blocks.Count; ++k)
+                    for (var k = 0; k < Groups.ElementAt(j).Blocks.Count; ++k)
                     {
                         tempBytes.Insert(0, Groups.ElementAt(j).Blocks.ElementAt(k).EcWords.ElementAt(i));
                         IntelevedBlockArray.Add(new BitArray(tempBytes.ToArray()));
