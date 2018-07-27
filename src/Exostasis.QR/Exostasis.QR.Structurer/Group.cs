@@ -17,7 +17,7 @@ namespace Exostasis.QR.Structurer
 {
     public class Group
     {
-        public List<Block> Blocks { get; private set; }
+        public List<Block> Blocks { get; }
         public Group ()
         {
             Blocks = new List<Block>();

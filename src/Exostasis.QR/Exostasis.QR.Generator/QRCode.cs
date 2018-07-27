@@ -17,9 +17,10 @@ using Exostasis.QR.Structurer;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
-using QREncoder;
+using Exerostasis.QR.Encoder;
 
 namespace Exostasis.QR.Generator
 {
@@ -28,15 +29,15 @@ namespace Exostasis.QR.Generator
         private const string NumericModeRegex = "^[0-9]+$";
         private const string AlphanumericModeRegex = "^[0-9a-z$%*+-./: ]+$";
 
-        private int Version { get; set; }
+        private int Version { get; }
 
-        private ErrorCorrectionLevel ErrorCorrectionLevel { get; set; }
+        private ErrorCorrectionLevel ErrorCorrectionLevel { get; }
 
-        private string UnencodedString { get; set; }
+        private string UnencodedString { get; }
 
         private byte[] EncodedArray { get; set; }
 
-        private EncoderBase QrEncoder { get; set; }
+        private EncoderBase QrEncoder { get; }
         private StructureGenerator QrStructurer { get; set; }
 
         private List<BitArray> StructuredArray { get; set; }
@@ -51,13 +52,22 @@ namespace Exostasis.QR.Generator
             ErrorCorrectionLevel = QrEncoder.ErrorCorrectionLevel;
         }
 
-        public void Generate(string filename, int scale = 12)
+        public void GenerateFile(string filename, int scale = 12)
         {            
             EncodedArray = QrEncoder.DataEncode();            
             QrStructurer = new StructureGenerator(EncodedArray, Version, ErrorCorrectionLevel);
             StructuredArray = QrStructurer.Generate();
             QrImage = new QrImage(Version, scale, StructuredArray, ErrorCorrectionLevel);
             QrImage.WriteImage(filename);
+        }
+        
+        public void GenerateStream(MemoryStream stream, int scale = 12)
+        {            
+            EncodedArray = QrEncoder.DataEncode();            
+            QrStructurer = new StructureGenerator(EncodedArray, Version, ErrorCorrectionLevel);
+            StructuredArray = QrStructurer.Generate();
+            QrImage = new QrImage(Version, scale, StructuredArray, ErrorCorrectionLevel);
+            QrImage.WriteStream(stream);
         }
 
         public int  GetSize()
@@ -91,8 +101,8 @@ namespace Exostasis.QR.Generator
 
         private bool IsIso8859(string inputString)
         {
-            byte[] isoBytes = Encoding.GetEncoding("ISO-8859-1").GetBytes(inputString);
-            string isoString = Encoding.GetEncoding("ISO-8859-1").GetString(isoBytes);
+            var isoBytes = Encoding.GetEncoding("ISO-8859-1").GetBytes(inputString);
+            var isoString = Encoding.GetEncoding("ISO-8859-1").GetString(isoBytes);
 
             return inputString.Equals(isoString);
         }

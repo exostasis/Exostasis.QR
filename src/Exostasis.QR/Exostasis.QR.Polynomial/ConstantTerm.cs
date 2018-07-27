@@ -1,11 +1,11 @@
 ﻿using System;
 
-namespace Exostasis.Polynomial
+namespace Exostasis.QR.Polynomial
 { 
     public class ConstantTerm
     {
-        public int _constant { get; private set; }
-        public Variable _variable { get; private set; }
+        public int _constant { get; }
+        public Variable _variable { get; }
 
         public ConstantTerm (int constant)
         {
